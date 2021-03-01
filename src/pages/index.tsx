@@ -1,61 +1,47 @@
 import Head from 'next/head';
-import { GetServerSideProps } from 'next';
+import Image from 'next/image';
+import { FiArrowRight } from 'react-icons/fi';
 
-import { ChallengesProvider } from '../contexts/ChallengesContext';
-import { CountdownProvider } from '../contexts/CountdownContext';
+import { AiFillGithub } from 'react-icons/ai';
 
-import ExperienceBar from '../components/ExperienceBar';
-import { Profile } from '../components/Profile';
-import { CompletedChallenges } from '../components/CompletedChallenges';
+import backgroundLogo from '../assets/back-logo.svg';
+import logoImg from '../assets/logo.png';
+import Button from '../components/Button';
+import Input from '../components/Input';
 
-import styles from '../styles/pages/Home.module.css';
-import { Countdown } from '../components/Countdown';
-import { ChallengeBox } from '../components/ChallengeBox';
+import { Container, Content, Wrapper } from '../styles/pages/Home';
 
-interface HomeProps {
-  level: number;
-  currentExperience: number;
-  challengesCompleted: number;
-}
-
-export default function Home(props: HomeProps) {
+export default function Home() {
   return (
-    <ChallengesProvider
-      level={props.level}
-      currentExperience={props.currentExperience}
-      challengesCompleted={props.challengesCompleted}
-    >
-      <div className={styles.container}>
-        <Head>
-          <title>Início | move.it</title>
-        </Head>
-        <ExperienceBar />
+    <Container>
+      <Head>
+        <title>Login | move.it</title>
+      </Head>
 
-        <CountdownProvider>
-          <section>
+      <Image src={backgroundLogo} width={768} height={600} />
+      <Content>
+        <Wrapper>
+          <Image src={logoImg} width={360} height={72} />
+
+          <div>
+            <h1>Bem-vindo</h1>
+
             <div>
-              <Profile />
-              <CompletedChallenges />
-              <Countdown />
+              <AiFillGithub color="#B2B9FF" />
+              <p>
+                Faça login com seu Github para começar
+              </p>
             </div>
+
             <div>
-              <ChallengeBox />
+              <Input name="username" />
+              <Button>
+                <FiArrowRight color="#fff" />
+              </Button>
             </div>
-          </section>
-        </CountdownProvider>
-      </div>
-    </ChallengesProvider>
+          </div>
+        </Wrapper>
+      </Content>
+    </Container>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { level, currentExperience, challengesCompleted } = ctx.req.cookies;
-
-  return {
-    props: {
-      level: Number(level),
-      currentExperience: Number(currentExperience),
-      challengesCompleted: Number(challengesCompleted),
-    }
-  }
 }
