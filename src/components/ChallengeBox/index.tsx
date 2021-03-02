@@ -1,7 +1,12 @@
 import { useContext } from 'react';
-import { ChallengesContext } from '../contexts/ChallengesContext';
-import { CountdownContext } from '../contexts/CountdownContext';
-import styles from '../styles/components/ChallengeBox.module.css';
+import { ChallengesContext } from '../../contexts/ChallengesContext';
+import { CountdownContext } from '../../contexts/CountdownContext';
+import {
+  Container,
+  ChallengeActive,
+  ChallengeNotActive,
+  Button
+} from './styles';
 
 export function ChallengeBox() {
   const { activeChallenge, resetChallenge, completeChallenge } = useContext(ChallengesContext);
@@ -18,9 +23,9 @@ export function ChallengeBox() {
   }
 
   return(
-    <div className={styles.challengeBoxContainer}>
+    <Container>
       { activeChallenge ? (
-        <div className={styles.challengeActive}>
+        <ChallengeActive>
           <header>Ganhe {activeChallenge.amount} xp</header>
 
           <main>
@@ -34,31 +39,31 @@ export function ChallengeBox() {
           </main>
 
           <footer>
-            <button
+            <Button
               type="button"
-              className={styles.challengeFailedButton}
+              background="red"
               onClick={handleChallengeFailed}
             >
               Falhei
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              className={styles.challengeSucceededButton}
+              background="green"
               onClick={handleChallengeSucceeded}
             >
               Completei
-            </button>
+            </Button>
           </footer>
-        </div>
+        </ChallengeActive>
       ) : (
-        <div className={styles.challengeNotActive}>
+        <ChallengeNotActive>
           <strong>Finalize um ciclo para receber um desafio</strong>
           <p>
             <img src="icons/level-up.svg" alt="Level Up"/>
             Avance de level completando desafios.
           </p>
-        </div>
+        </ChallengeNotActive>
       )}
-    </div>
+    </Container>
   )
 }

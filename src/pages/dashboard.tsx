@@ -8,7 +8,7 @@ import ExperienceBar from '../components/ExperienceBar';
 import { Profile } from '../components/Profile';
 import { CompletedChallenges } from '../components/CompletedChallenges';
 
-import styles from '../styles/pages/Dashboard.module.css';
+import { Container } from '../styles/pages/Dashboard';
 import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
 
@@ -25,7 +25,7 @@ export default function Dashboard(props: DashboardProps) {
       currentExperience={props.currentExperience}
       challengesCompleted={props.challengesCompleted}
     >
-      <div className={styles.container}>
+      <Container>
         <Head>
           <title>Início | move.it</title>
         </Head>
@@ -43,7 +43,7 @@ export default function Dashboard(props: DashboardProps) {
             </div>
           </section>
         </CountdownProvider>
-      </div>
+      </Container>
     </ChallengesProvider>
   )
 }

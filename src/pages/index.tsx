@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FiArrowRight } from 'react-icons/fi';
 
 import { AiFillGithub } from 'react-icons/ai';
@@ -35,9 +36,13 @@ export default function Home() {
 
             <div>
               <Input name="username" />
-              <Button>
-                <FiArrowRight color="#fff" />
-              </Button>
+              <Link href="/dashboard">
+                <a>
+                  <Button>
+                    <FiArrowRight color="#fff" />
+                  </Button>
+                </a>
+              </Link>
             </div>
           </div>
         </Wrapper>
