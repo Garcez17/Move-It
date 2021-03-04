@@ -11,6 +11,7 @@ import { CompletedChallenges } from '../components/CompletedChallenges';
 import { Container } from '../styles/pages/Dashboard';
 import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
+import { Sidebar } from '../components/Sidebar';
 
 interface DashboardProps {
   level: number;
@@ -29,20 +30,23 @@ export default function Dashboard(props: DashboardProps) {
         <Head>
           <title>Início | move.it</title>
         </Head>
-        <ExperienceBar />
+        <Sidebar />
+        <div>
+          <ExperienceBar />
 
-        <CountdownProvider>
-          <section>
-            <div>
-              <Profile />
-              <CompletedChallenges />
-              <Countdown />
-            </div>
-            <div>
-              <ChallengeBox />
-            </div>
-          </section>
-        </CountdownProvider>
+          <CountdownProvider>
+            <section>
+              <div>
+                <Profile />
+                <CompletedChallenges />
+                <Countdown />
+              </div>
+              <div>
+                <ChallengeBox />
+              </div>
+            </section>
+          </CountdownProvider>
+        </div>
       </Container>
     </ChallengesProvider>
   )

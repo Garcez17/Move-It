@@ -26,17 +26,20 @@ export function ChallengeBox() {
     <Container>
       { activeChallenge ? (
         <ChallengeActive>
-          <header>Ganhe {activeChallenge.amount} xp</header>
+          <div>
+            <header>Ganhe {activeChallenge.amount} xp</header>
 
-          <main>
-            {activeChallenge.type === 'body' ? (
-              <img src="icons/body.svg"/>
-            ) : (
-              <img src="icons/eye.svg"/>
-            )}
-            <strong>Novo desafio</strong>
-            <p>{activeChallenge.description}</p>
-          </main>
+            <main>
+              {activeChallenge.type === 'body' ? (
+                <img src="icons/body.svg"/>
+              ) : (
+                <img src="icons/eye.svg"/>
+              )}
+              <strong>Novo desafio</strong>
+              <p>{activeChallenge.description}</p>
+            </main>
+          </div>
+          
 
           <footer>
             <Button

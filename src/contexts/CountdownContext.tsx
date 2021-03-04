@@ -4,6 +4,7 @@ import { ChallengesContext } from "./ChallengesContext";
 interface CountdownContextData {
   minutes: number;
   seconds: number;
+  totalTime: number;
   hasFinished: boolean;
   isActive: boolean;
   startCountdown: () => void;
@@ -21,7 +22,8 @@ export const CountdownContext = createContext({} as CountdownContextData);
 export function CountdownProvider({ children }: CountdownProviderProps) {
   const { startNewChallenge, activeChallenge } = useContext(ChallengesContext);
   
-  const [time, setTime] = useState(0.05 * 60);
+  const totalTime = 0.05 * 60;
+  const [time, setTime] = useState(totalTime);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
   
@@ -35,7 +37,7 @@ export function CountdownProvider({ children }: CountdownProviderProps) {
   function resetCountdown() {
     clearTimeout(countdownTimeout);
     setIsActive(false);
-    setTime(0.05 * 60);
+    setTime(totalTime);
     setHasFinished(false);
   }
 
@@ -59,6 +61,7 @@ export function CountdownProvider({ children }: CountdownProviderProps) {
       isActive,
       startCountdown,
       resetCountdown,
+      totalTime,
     }}>
       {children}
     </CountdownContext.Provider>
