@@ -1,16 +1,18 @@
 import { useContext } from 'react';
 import { ChallengesContext } from '../../contexts/ChallengesContext';
+import { PlayerContext } from '../../contexts/PlayerContext';
 import { Container } from './styles';
 
 export function Profile() {
   const { level } = useContext(ChallengesContext);
+  const { player } = useContext(PlayerContext);
 
   return (
     <Container>
-      <img src="https://github.com/garcez17.png" alt="Gabriel Garcez"/>
+      <img src={player ? player.image_url : null} alt={player ? player.name : 'Carregando...'}/>
 
       <div>
-        <strong>Gabriel Garcez</strong>
+        <strong>{player ? player.name : 'Carregando...'}</strong>
         <p>
           <img src="icons/level.svg" alt="Level"/>
           Level {level}

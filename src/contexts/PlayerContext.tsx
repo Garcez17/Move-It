@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useState } from "react";
+import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 
 interface Player {
@@ -24,27 +24,41 @@ interface PlayerProviderProps {
 }
 
 export function PlayerProvider({ children }: PlayerProviderProps ) {
-  const [player, setPlayer] = useState<Player>(null);
-  const [players, setPlayers] = useState<Player[]>([]);
+  const response = Cookies.get('players');
 
-  const findPlayer = useCallback((player_username: string) => {
-    const response = Cookies.get('players');
+  let playersInCookie = [];
+    
+  if (response) {
+    playersInCookie = JSON.parse(response) as Player[];
+  }
+
+  const [player, setPlayer] = useState<Player>(null);
+  const [players, setPlayers] = useState<Player[]>(playersInCookie);
+
+  useEffect(() => {
+    const response = Cookies.get('player');
 
     if (response) {
-      const playersInCookie = JSON.parse(response) as Player[];
+      const playerInCookie = JSON.parse(response) as Player;
+  
+      setPlayer(playerInCookie);
+    }
+  }, []);
 
+  const findPlayer = useCallback((player_username: string) => {
+    if (response) {
       const findPlayer = playersInCookie.find(
-        playerInCokkie => playerInCokkie.username === player_username,
-      );
+        playerInCokkie => playerInCokkie.username.localeCompare(player_username, { sensitivity: 'base' }),
+      ) as Player;
 
       if (!findPlayer) addPlayer(player_username);
-  
+
       setPlayer(findPlayer);
       setPlayers(playersInCookie);
     } else {
       addPlayer(player_username);
     }
-  }, [])
+  }, []);
 
   const addPlayer = useCallback(async (player_username: string) => {
     const response = await fetch(`https://api.github.com/users/${player_username}`);
@@ -58,6 +72,7 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
       challengesCompleted: 0,
       currentExperience: 0,
     }
+    setPlayer(player);
 
     const newArr = players;
 
@@ -67,6 +82,10 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
 
     Cookies.set('players', JSON.stringify(players));
     Cookies.set('player', JSON.stringify(player));
+  }, []);
+
+  const updatePlayer = useCallback((player_username) => {
+
   }, []);
 
   return (

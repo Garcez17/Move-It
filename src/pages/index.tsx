@@ -17,10 +17,9 @@ import { Container, Content, Wrapper } from '../styles/pages/Home';
 export default function Home() {
   const [username, setUsername] = useState('');
 
-  const { findPlayer, players } = useContext(PlayerContext);
+  const { findPlayer, player } = useContext(PlayerContext);
 
   const handleSubmit = useCallback((username: string) => {
-    console.log(username);
     findPlayer(username);
   }, []);
 
@@ -47,9 +46,13 @@ export default function Home() {
 
             <div>
               <Input name="username" setUsername={setUsername} />
-              <button onClick={() => handleSubmit(username)}>
-                <FiArrowRight color="#fff" />
-              </button>
+              <Link href="/dashboard">
+                <a>
+                  <button onClick={() => handleSubmit(username)}>
+                    <FiArrowRight color="#fff" />
+                  </button>
+                </a>
+              </Link>
             </div>
           </div>
         </Wrapper>

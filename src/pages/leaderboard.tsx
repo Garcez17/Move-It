@@ -1,10 +1,14 @@
+import { useContext } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import { Sidebar } from "../components/Sidebar";
+import { PlayerContext } from '../contexts/PlayerContext';
 
 import { Container, Content } from '../styles/pages/Leaderboard';
 
 export default function Leaderboard() {
+  const { players } = useContext(PlayerContext);
+  
   return (
     <Container>
       <Head>
@@ -26,76 +30,31 @@ export default function Leaderboard() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>
-                <img src="https://github.com/garcez17.png" alt="Gabriel Garcez"/>
-                <div>
-                  <strong>
-                    Gabriel Garcez
-                  </strong>
-                  <span>
-                    <img src='icons/level.svg' width={14} height={16} />
-                    Level 36
-                  </span>
-                </div>
-              </td>
-              <td>
-                <span>127</span>
-                completados
-              </td>
-              <td>
-                <span>15400</span>
-                xp
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                <img src="https://github.com/garcez17.png" alt="Gabriel Garcez"/>
-                <div>
-                  <strong>
-                    Gabriel Garcez
-                  </strong>
-                  <span>
-                    <img src='icons/level.svg' width={14} height={16} />
-                    Level 36
-                  </span>
-                </div>
-              </td>
-              <td>
-                <span>127</span>
-                completados
-              </td>
-              <td>
-                <span>15400</span>
-                xp
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>
-                <img src="https://github.com/garcez17.png" alt="Gabriel Garcez"/>
-                <div>
-                  <strong>
-                    Tiago Luchtenberg
-                  </strong>
-                  <span>
-                    <img src='icons/level.svg' width={14} height={16} />
-                    Level 36
-                  </span>
-                </div>
-              </td>
-              <td>
-                <span>127</span>
-                completados
-              </td>
-              <td>
-                <span>15400</span>
-                xp
-              </td>
-            </tr>
-            
+            {players.map(player => (
+              <tr key={player.username}>
+                <td>1</td>
+                <td>
+                  <img src={player.image_url} alt="Gabriel Garcez"/>
+                  <div>
+                    <strong>
+                      {player.name}
+                    </strong>
+                    <span>
+                      <img src='icons/level.svg' width={14} height={16} />
+                      Level {player.level}
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <span>{player.challengesCompleted}</span>
+                  completados
+                </td>
+                <td>
+                  <span>{player.currentExperience}</span>
+                  xp
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </Content>

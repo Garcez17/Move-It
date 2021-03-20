@@ -1,12 +1,12 @@
 import GlobalStyles from '../styles/GlobalStyle';
-import { PlayerProvider } from '../contexts/PlayerContext';
+import { AppProvider } from '../contexts';
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <PlayerProvider>
+      <AppProvider>
         <Component {...pageProps} />
-      </PlayerProvider>
+      </AppProvider>
       <GlobalStyles />
     </>
   )
