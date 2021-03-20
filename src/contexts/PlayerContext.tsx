@@ -28,7 +28,7 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
   const [players, setPlayers] = useState<Player[]>([]);
 
   const findPlayer = useCallback((player_username: string) => {
-    const response = Cookies.get('Players');
+    const response = Cookies.get('players');
 
     if (response) {
       const playersInCookie = JSON.parse(response) as Player[];
@@ -37,30 +37,16 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
         playerInCokkie => playerInCokkie.username === player_username,
       );
 
-      console.log('Acha jogador');
-
       if (!findPlayer) addPlayer(player_username);
   
       setPlayer(findPlayer);
+      setPlayers(playersInCookie);
     } else {
-      console.log('Cria Jogador');
       addPlayer(player_username);
     }
   }, [])
 
   const addPlayer = useCallback(async (player_username: string) => {
-    // const pInCookie = Cookies.get('Players');
-
-    // if (pInCookie) {
-    //   const playersInCookie = JSON.parse(pInCookie) as Player[];
-
-    //   const findPlayer = playersInCookie.find(
-    //     playerInCokkie => playerInCokkie.name === player_name,
-    //   );
-  
-    //   if (findPlayer) return;
-    // }
-
     const response = await fetch(`https://api.github.com/users/${player_username}`);
     const data = await response.json();
 
@@ -73,7 +59,11 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
       currentExperience: 0,
     }
 
-    setPlayers(oldState => [...oldState, player]);
+    const newArr = players;
+
+    newArr.push(player);
+
+    setPlayers(newArr);
 
     Cookies.set('players', JSON.stringify(players));
     Cookies.set('player', JSON.stringify(player));

@@ -17,7 +17,7 @@ import { Container, Content, Wrapper } from '../styles/pages/Home';
 export default function Home() {
   const [username, setUsername] = useState('');
 
-  const { findPlayer } = useContext(PlayerContext);
+  const { findPlayer, players } = useContext(PlayerContext);
 
   const handleSubmit = useCallback((username: string) => {
     console.log(username);
