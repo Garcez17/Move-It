@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  display: flex;
+`;
+
+export const Content = styled.div`
   height: 100vh;
   max-width: 992px;
   margin: 0 auto;

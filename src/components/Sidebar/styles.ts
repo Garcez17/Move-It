@@ -2,16 +2,13 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   height: 100vh;
   width: 112px;
   background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
   padding: 32px 0;
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.05);
-
-  position: absolute;
-  top: 0;
-  left: 0;
 
   section {
     flex: 1;

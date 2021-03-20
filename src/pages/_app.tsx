@@ -1,10 +1,12 @@
-import { Sidebar } from '../components/Sidebar';
 import GlobalStyles from '../styles/GlobalStyle';
+import { PlayerProvider } from '../contexts/PlayerContext';
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <Component {...pageProps} />
+      <PlayerProvider>
+        <Component {...pageProps} />
+      </PlayerProvider>
       <GlobalStyles />
     </>
   )

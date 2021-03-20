@@ -8,7 +8,7 @@ import ExperienceBar from '../components/ExperienceBar';
 import { Profile } from '../components/Profile';
 import { CompletedChallenges } from '../components/CompletedChallenges';
 
-import { Container } from '../styles/pages/Dashboard';
+import { Container, Content } from '../styles/pages/Dashboard';
 import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
 import { Sidebar } from '../components/Sidebar';
@@ -27,26 +27,28 @@ export default function Dashboard(props: DashboardProps) {
       challengesCompleted={props.challengesCompleted}
     >
       <Container>
-        <Head>
-          <title>Início | move.it</title>
-        </Head>
         <Sidebar />
-        <div>
-          <ExperienceBar />
+        <Content>
+          <Head>
+            <title>Início | move.it</title>
+          </Head>
+          <div>
+            <ExperienceBar />
 
-          <CountdownProvider>
-            <section>
-              <div>
-                <Profile />
-                <CompletedChallenges />
-                <Countdown />
-              </div>
-              <div>
-                <ChallengeBox />
-              </div>
-            </section>
-          </CountdownProvider>
-        </div>
+            <CountdownProvider>
+              <section>
+                <div>
+                  <Profile />
+                  <CompletedChallenges />
+                  <Countdown />
+                </div>
+                <div>
+                  <ChallengeBox />
+                </div>
+              </section>
+            </CountdownProvider>
+          </div>
+        </Content>
       </Container>
     </ChallengesProvider>
   )

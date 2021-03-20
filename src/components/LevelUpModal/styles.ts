@@ -11,17 +11,49 @@ export const Overlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  backdrop-filter: blur(3px);
 `;
 
 export const Container = styled.div`
   background: var(--white);
   width: 100%;
   max-width: 400px;
-  padding: 2rem 3rem;
+  
   border-radius: 5px;
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.05);
-  text-align: center;
   position: relative;
+  z-index: 99;
+
+  > button {
+    width: 100%;
+    padding: 28px 0;
+    border: 0;
+    border-top: 1px solid #DCDDE0;
+    background: #F5FCFF;
+
+    font-size: 1.25rem;
+    color: #2AA9E0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: filter 0.2s;
+
+    svg {
+      margin-left: 1rem;
+    }
+
+    &:hover {
+      filter: brightness(0.95);
+    }
+  }
+`;
+
+export const Wrapper = styled.div`
+  padding: 2rem 3rem;
+  text-align: center;
 
   > header {
     font-size: 8.75rem;

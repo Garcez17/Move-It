@@ -1,6 +1,7 @@
 import { useContext } from 'react';
+import { ImTwitter } from 'react-icons/im';
 import { ChallengesContext } from '../../contexts/ChallengesContext';
-import { Overlay, Container } from './styles';
+import { Overlay, Container, Wrapper } from './styles';
 
 export function LevelUpModal() {
   const { level, closeLevelUpModal } = useContext(ChallengesContext);
@@ -8,13 +9,19 @@ export function LevelUpModal() {
   return (
     <Overlay>
       <Container>
-        <header>{level}</header>
+        <Wrapper>
+          <header>{level}</header>
 
-        <strong>Parabéns</strong>
-        <p>Você alcançou um novo level.</p>
+          <strong>Parabéns</strong>
+          <p>Você alcançou um novo level.</p>
 
-        <button onClick={closeLevelUpModal}>
-          <img src="/icons/close.svg" alt=""/>
+          <button onClick={closeLevelUpModal}>
+            <img src="/icons/close.svg" alt="close"/>
+          </button>
+        </Wrapper>
+        <button>
+          Compartilhar no twitter
+          <ImTwitter size={24} color="#2AA9E0" />
         </button>
       </Container>
     </Overlay>

@@ -1,5 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { ChallengesContext } from '../../contexts/ChallengesContext';
 
@@ -9,8 +11,13 @@ import { Container, Bar } from './styles';
 import { FiAward, FiHome } from 'react-icons/fi';
 
 export function Sidebar() {
-  const [page, setPage] = useState<'dash' | 'leader'>('dash');
+  const router = useRouter();
+  const [page, setPage] = useState(router.pathname);
   const { level } = useContext(ChallengesContext);
+
+  useEffect(() => {
+    setPage(router.pathname);
+  }, [router.pathname]);
 
   return (
     <Container>
@@ -22,15 +29,19 @@ export function Sidebar() {
 
       <section>
         <div>
-          <a>
-            {page === 'dash' && <Bar />}
-            
-            <FiHome color={page === 'dash' ? '#5965E0' : '#ACACAC'} />
-          </a>
-          <a>
-            {page === 'leader' && <Bar />}
-            <FiAward color={page === 'leader' ? '#5965E0' : '#ACACAC'} />
-          </a>
+          <Link href="/dashboard">
+            <a>
+              {page === '/dashboard' && <Bar />}
+              
+              <FiHome color={page === '/dashboard' ? '#5965E0' : '#ACACAC'} />
+            </a>
+          </Link>
+          <Link href="/leaderboard">
+            <a>
+              {page === '/leaderboard' && <Bar />}
+              <FiAward color={page === '/leaderboard' ? '#5965E0' : '#ACACAC'} />
+            </a>
+          </Link>
         </div>
       </section>
     </Container>

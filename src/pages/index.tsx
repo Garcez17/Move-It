@@ -1,6 +1,8 @@
+import { useCallback, useContext, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
+import { PlayerContext } from '../contexts/PlayerContext';
 import { FiArrowRight } from 'react-icons/fi';
 
 import { AiFillGithub } from 'react-icons/ai';
@@ -13,6 +15,15 @@ import Input from '../components/Input';
 import { Container, Content, Wrapper } from '../styles/pages/Home';
 
 export default function Home() {
+  const [username, setUsername] = useState('');
+
+  const { findPlayer } = useContext(PlayerContext);
+
+  const handleSubmit = useCallback((username: string) => {
+    console.log(username);
+    findPlayer(username);
+  }, []);
+
   return (
     <Container>
       <Head>
@@ -35,14 +46,10 @@ export default function Home() {
             </div>
 
             <div>
-              <Input name="username" />
-              <Link href="/dashboard">
-                <a>
-                  <Button>
-                    <FiArrowRight color="#fff" />
-                  </Button>
-                </a>
-              </Link>
+              <Input name="username" setUsername={setUsername} />
+              <button onClick={() => handleSubmit(username)}>
+                <FiArrowRight color="#fff" />
+              </button>
             </div>
           </div>
         </Wrapper>
