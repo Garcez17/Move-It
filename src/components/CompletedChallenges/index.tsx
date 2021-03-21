@@ -1,13 +1,17 @@
 import { useContext, useMemo } from 'react';
-import { ChallengesContext } from '../../contexts/ChallengesContext';
+import { PlayerContext } from '../../contexts/PlayerContext';
 import { Container } from './styles';
 
 export function CompletedChallenges() {
-  const { challengesCompleted } = useContext(ChallengesContext);
+  const { player } = useContext(PlayerContext);
 
   const challangesComplete= useMemo(() => {
-    return String(challengesCompleted).padStart(2, '0').split('');
-  }, [challengesCompleted]);
+    if (player) {
+      return String(player.challengesCompleted).padStart(2, '0').split('');
+    } else {
+      return '00';
+    }
+  }, [player?.challengesCompleted]);
   
   return (
     <Container>

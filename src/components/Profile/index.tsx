@@ -15,7 +15,7 @@ export function Profile() {
         <strong>{player ? player.name : 'Carregando...'}</strong>
         <p>
           <img src="icons/level.svg" alt="Level"/>
-          Level {level}
+          Level {player ? player.level: 'Carregando...'}
         </p>
       </div>
     </Container>

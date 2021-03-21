@@ -33,15 +33,19 @@ interface ChallengesProviderProps {
 }
 
 export function ChallengesProvider({ children, ...rest }: ChallengesProviderProps) {
-  const { player } = useContext(PlayerContext);
+  const { player,  updatePlayerExperienceChallenges } = useContext(PlayerContext);
 
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
   const [level, setLevel] = useState(player ? player.level : 1);
+  const [experienceToNextLevel, setExperienceToNextLevel] = useState(player ? Math.pow((player.level + 1) * 4, 2) : 0);
   const [currentExperience, setCurrentExperience] = useState(player ? player.currentExperience : 0);
   const [challengesCompleted, setChallengesCompleted] = useState(player ? player.challengesCompleted : 0);
   const [activeChallenge, setActiveChallenge] = useState<Challenge>(null);
 
-  const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
+  useEffect(() => {
+    if (player) setExperienceToNextLevel(Math.pow((player.level + 1) * 4, 2));
+  }, [player?.level]);
+
 
   useEffect(() => {
     Notification.requestPermission();
@@ -54,7 +58,6 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
   }, [level, currentExperience, challengesCompleted]);
 
   function levelUp() {
-    setLevel(level + 1);
     setIsLevelUpModalOpen(true);
   }
 
@@ -87,16 +90,17 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
 
     const { amount } = activeChallenge;
 
-    let finalExperience = currentExperience + amount;
+    let finalExperience = player.currentExperience + amount;
 
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
+      console.log('subiu de nivel');
       levelUp();
     }
 
-    setCurrentExperience(finalExperience);
+    updatePlayerExperienceChallenges(player.username, amount, experienceToNextLevel);
+
     setActiveChallenge(null);
-    setChallengesCompleted(challengesCompleted + 1);
   }
 
   return (

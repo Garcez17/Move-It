@@ -13,6 +13,8 @@ interface Player {
 interface PlayerContextData {
   findPlayer: (player_name: string) => void;
   addPlayer: (player_name: string) => void;
+  // updatePlayerLevel: (player_name: string) => void;
+  updatePlayerExperienceChallenges: (player_name: string, amountXP: number,experienceToNextLevel: number) => void;
   player: Player;
   players: Player[];
 }
@@ -45,10 +47,19 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
     }
   }, []);
 
+  useEffect(() => {
+    if (player) {
+      Cookies.set('player', JSON.stringify(player));
+      Cookies.set('players', JSON.stringify(players));
+    }
+  }, [player, players]);
+
   const findPlayer = useCallback((player_username: string) => {
     if (response) {
       const findPlayer = playersInCookie.find(
-        playerInCokkie => playerInCokkie.username.localeCompare(player_username, { sensitivity: 'base' }),
+        playerInCokkie => {
+          return playerInCokkie.username.toLowerCase() === player_username.toLowerCase();
+        },
       ) as Player;
 
       if (!findPlayer) addPlayer(player_username);
@@ -84,9 +95,43 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
     Cookies.set('player', JSON.stringify(player));
   }, []);
 
-  const updatePlayer = useCallback((player_username) => {
+  const updatePlayerExperienceChallenges = useCallback((player_username: string, amountXP: number, experienceToNextLevel: number) => {
+    const { currentExperience } = player;
 
-  }, []);
+    let finalExperience = currentExperience + amountXP;
+
+    if (finalExperience >= experienceToNextLevel) {
+      finalExperience = finalExperience - experienceToNextLevel;
+
+      const newPlayers = players.map(player => player.username.toLowerCase() === player_username.toLowerCase() ? {
+        ...player,
+        currentExperience: finalExperience,
+        challengesCompleted: player.challengesCompleted + 1,
+        level: player.level + 1,
+      } : player);
+  
+      setPlayer({
+        ...player,
+        challengesCompleted: player.challengesCompleted + 1,
+        currentExperience: finalExperience,
+        level: player.level + 1,
+      });
+      setPlayers(newPlayers);
+    } else {
+      const newPlayers = players.map(player => player.username.toLowerCase() === player_username.toLowerCase() ? {
+        ...player,
+        currentExperience: finalExperience,
+        challengesCompleted: player.challengesCompleted + 1,
+      } : player);
+  
+      setPlayer({
+        ...player,
+        challengesCompleted: player.challengesCompleted + 1,
+        currentExperience: finalExperience,
+      });
+      setPlayers(newPlayers);
+    }
+  }, [player]);
 
   return (
     <PlayerContext.Provider value={{
@@ -94,6 +139,8 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
       findPlayer,
       player,
       players,
+      // updatePlayerLevel,
+      updatePlayerExperienceChallenges,
     }}>
       {children}
     </PlayerContext.Provider>

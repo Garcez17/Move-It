@@ -1,16 +1,18 @@
 import { useContext } from 'react';
 import { ImTwitter } from 'react-icons/im';
 import { ChallengesContext } from '../../contexts/ChallengesContext';
+import { PlayerContext } from '../../contexts/PlayerContext';
 import { Overlay, Container, Wrapper } from './styles';
 
 export function LevelUpModal() {
-  const { level, closeLevelUpModal } = useContext(ChallengesContext);
+  const { closeLevelUpModal } = useContext(ChallengesContext);
+  const { player } = useContext(PlayerContext);
 
   return (
     <Overlay>
       <Container>
         <Wrapper>
-          <header>{level}</header>
+          <header>{player ? player.level : 'Carregando...'}</header>
 
           <strong>Parabéns</strong>
           <p>Você alcançou um novo level.</p>
