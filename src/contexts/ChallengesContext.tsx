@@ -11,11 +11,8 @@ interface Challenge {
 }
 
 interface ChallengesContextData {
-  level: number;
   activeChallenge: Challenge;
-  currentExperience: number;
   experienceToNextLevel: number;
-  challengesCompleted: number;
   levelUp: () => void;
   startNewChallenge: () => void;
   resetChallenge: () => void;
@@ -27,35 +24,22 @@ export const ChallengesContext = createContext({} as ChallengesContextData);
 
 interface ChallengesProviderProps {
   children: ReactNode;
-  // level: number;
-  // currentExperience: number;
-  // challengesCompleted: number;
 }
 
 export function ChallengesProvider({ children, ...rest }: ChallengesProviderProps) {
-  const { player,  updatePlayerExperienceChallenges } = useContext(PlayerContext);
+  const { player,  updatePlayer } = useContext(PlayerContext);
 
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
-  const [level, setLevel] = useState(player ? player.level : 1);
   const [experienceToNextLevel, setExperienceToNextLevel] = useState(player ? Math.pow((player.level + 1) * 4, 2) : 0);
-  const [currentExperience, setCurrentExperience] = useState(player ? player.currentExperience : 0);
-  const [challengesCompleted, setChallengesCompleted] = useState(player ? player.challengesCompleted : 0);
   const [activeChallenge, setActiveChallenge] = useState<Challenge>(null);
 
   useEffect(() => {
     if (player) setExperienceToNextLevel(Math.pow((player.level + 1) * 4, 2));
   }, [player?.level]);
 
-
   useEffect(() => {
     Notification.requestPermission();
   }, []);
-
-  useEffect(() => {
-    Cookies.set('level', String(level));
-    Cookies.set('currentExperience', String(currentExperience));
-    Cookies.set('challengesCompleted', String(challengesCompleted));
-  }, [level, currentExperience, challengesCompleted]);
 
   function levelUp() {
     setIsLevelUpModalOpen(true);
@@ -94,20 +78,16 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
 
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
-      console.log('subiu de nivel');
       levelUp();
     }
 
-    updatePlayerExperienceChallenges(player.username, amount, experienceToNextLevel);
+    updatePlayer(player.username, amount, experienceToNextLevel);
 
     setActiveChallenge(null);
   }
 
   return (
     <ChallengesContext.Provider value={{ 
-      level,
-      challengesCompleted,
-      currentExperience,
       experienceToNextLevel,
       levelUp,
       startNewChallenge,

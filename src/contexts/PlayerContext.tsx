@@ -7,14 +7,14 @@ interface Player {
   image_url: string;
   level: number;
   currentExperience: number;
+  total_experience: number;
   challengesCompleted: number;
 }
 
 interface PlayerContextData {
   findPlayer: (player_name: string) => void;
   addPlayer: (player_name: string) => void;
-  // updatePlayerLevel: (player_name: string) => void;
-  updatePlayerExperienceChallenges: (player_name: string, amountXP: number,experienceToNextLevel: number) => void;
+  updatePlayer: (player_name: string, amountXP: number,experienceToNextLevel: number) => void;
   player: Player;
   players: Player[];
 }
@@ -82,6 +82,7 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
       level: 1,
       challengesCompleted: 0,
       currentExperience: 0,
+      total_experience: 0,
     }
     setPlayer(player);
 
@@ -95,8 +96,8 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
     Cookies.set('player', JSON.stringify(player));
   }, []);
 
-  const updatePlayerExperienceChallenges = useCallback((player_username: string, amountXP: number, experienceToNextLevel: number) => {
-    const { currentExperience } = player;
+  const updatePlayer = useCallback((player_username: string, amountXP: number, experienceToNextLevel: number) => {
+    const { currentExperience, total_experience } = player;
 
     let finalExperience = currentExperience + amountXP;
 
@@ -107,13 +108,21 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
         ...player,
         currentExperience: finalExperience,
         challengesCompleted: player.challengesCompleted + 1,
+        total_experience: total_experience + amountXP,
         level: player.level + 1,
       } : player);
+
+      newPlayers.sort(function compare(player1, player2) {
+        if (player1.total_experience > player2.total_experience) return -1;
+        if (player1.total_experience < player2.total_experience) return 1;
+        return 0;
+      });
   
       setPlayer({
         ...player,
         challengesCompleted: player.challengesCompleted + 1,
         currentExperience: finalExperience,
+        total_experience: total_experience + amountXP,
         level: player.level + 1,
       });
       setPlayers(newPlayers);
@@ -122,12 +131,20 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
         ...player,
         currentExperience: finalExperience,
         challengesCompleted: player.challengesCompleted + 1,
+        total_experience: total_experience + amountXP,
       } : player);
+
+      newPlayers.sort(function compare(player1, player2) {
+        if (player1.total_experience > player2.total_experience) return -1;
+        if (player1.total_experience < player2.total_experience) return 1;
+        return 0;
+      });
   
       setPlayer({
         ...player,
-        challengesCompleted: player.challengesCompleted + 1,
         currentExperience: finalExperience,
+        challengesCompleted: player.challengesCompleted + 1,
+        total_experience: total_experience + amountXP,
       });
       setPlayers(newPlayers);
     }
@@ -139,8 +156,7 @@ export function PlayerProvider({ children }: PlayerProviderProps ) {
       findPlayer,
       player,
       players,
-      // updatePlayerLevel,
-      updatePlayerExperienceChallenges,
+      updatePlayer,
     }}>
       {children}
     </PlayerContext.Provider>

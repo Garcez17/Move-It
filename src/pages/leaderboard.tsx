@@ -30,9 +30,9 @@ export default function Leaderboard() {
           </thead>
 
           <tbody>
-            {players.map(player => (
+            {players.map((player, index) => (
               <tr key={player.username}>
-                <td>1</td>
+                <td>{index + 1}</td>
                 <td>
                   <img src={player.image_url} alt="Gabriel Garcez"/>
                   <div>
@@ -50,7 +50,7 @@ export default function Leaderboard() {
                   completados
                 </td>
                 <td>
-                  <span>{player.currentExperience}</span>
+                  <span>{player.total_experience}</span>
                   xp
                 </td>
               </tr>
