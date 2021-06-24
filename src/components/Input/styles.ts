@@ -11,6 +11,8 @@ export const Container = styled.div`
   align-items: center;
   border: 2px solid transparent;
 
+  transition: border 0.2s;
+
   & + div {
     margin-top: 8px;
   }

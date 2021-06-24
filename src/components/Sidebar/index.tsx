@@ -13,7 +13,6 @@ import { FiAward, FiHome } from 'react-icons/fi';
 export function Sidebar() {
   const router = useRouter();
   const [page, setPage] = useState(router.pathname);
-  const { level } = useContext(ChallengesContext);
 
   useEffect(() => {
     setPage(router.pathname);

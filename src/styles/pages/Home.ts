@@ -25,7 +25,7 @@ export const Wrapper = styled.div`
       margin-bottom: 24px;
     }
 
-    > div {
+    div {
       display: flex;
 
       > svg {
@@ -44,8 +44,9 @@ export const Wrapper = styled.div`
       }
     }
 
-    div + div {
-      margin-top: 40px;
+    form {
+      display: flex;
+      margin-top: 32px;
     }
   }
 `;

@@ -9,7 +9,7 @@ import { AiFillGithub } from 'react-icons/ai';
 
 import backgroundLogo from '../assets/back-logo.svg';
 import logoImg from '../assets/logo.png';
-import Button from '../components/Button';
+import {Button} from '../components/Button';
 import Input from '../components/Input';
 
 import { Container, Content, Wrapper } from '../styles/pages/Home';
@@ -17,11 +17,11 @@ import { Container, Content, Wrapper } from '../styles/pages/Home';
 export default function Home() {
   const [username, setUsername] = useState('');
 
-  const { findPlayer, player } = useContext(PlayerContext);
+  const { findPlayer } = useContext(PlayerContext);
 
-  const handleSubmit = useCallback((username: string) => {
+  function handleSubmit() {
     findPlayer(username);
-  }, []);
+  }
 
   return (
     <Container>
@@ -44,16 +44,16 @@ export default function Home() {
               </p>
             </div>
 
-            <div>
+            <form onSubmit={handleSubmit}>
               <Input name="username" setUsername={setUsername} />
               <Link href="/dashboard">
                 <a>
-                  <button onClick={() => handleSubmit(username)}>
+                  <Button>
                     <FiArrowRight color="#fff" />
-                  </button>
+                  </Button>
                 </a>
               </Link>
-            </div>
+            </form>
           </div>
         </Wrapper>
       </Content>

@@ -4,7 +4,6 @@ import { PlayerContext } from '../../contexts/PlayerContext';
 import { Container } from './styles';
 
 export function Profile() {
-  const { level } = useContext(ChallengesContext);
   const { player } = useContext(PlayerContext);
 
   return (

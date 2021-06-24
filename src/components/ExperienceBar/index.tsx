@@ -5,7 +5,7 @@ import { PlayerContext } from '../../contexts/PlayerContext';
 import { Container } from './styles';
 
 const ExperienceBar: React.FC = () => {
-  const { currentExperience, experienceToNextLevel } = useContext(ChallengesContext);
+  const { experienceToNextLevel } = useContext(ChallengesContext);
   const { player } = useContext(PlayerContext);
 
   const percentToNextLevel = useMemo(() => {

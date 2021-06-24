@@ -117,4 +117,5 @@ export const Bar = styled.div<BarProps>`
   border-radius: 0 0 4px 4px;
 
   animation: ${progress} ${props => props.time}s linear;
+  animation-timing-function: linear;
 `;
