@@ -14,9 +14,14 @@ import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
 import { Sidebar } from '../components/Sidebar';
 import { PlayerContext } from '../contexts/PlayerContext';
+import { useSession } from 'next-auth/client';
+import { withSSRAuth } from '../utils/withSSRAuth';
 
 export default function Dashboard() {
   const { player } = useContext(PlayerContext);
+  const [session] = useSession();
+
+  console.log(session);
 
   return (
     <Container>
@@ -45,3 +50,9 @@ export default function Dashboard() {
     </Container>
   )
 }
+
+export const getServerSideProps = withSSRAuth(async () => {
+  return {
+    props: {}
+  }
+});

@@ -1,17 +1,22 @@
+import { ReactNode } from 'react';
+import { Provider as NextAuthProvider } from 'next-auth/client';
+
 import { PlayerProvider } from './PlayerContext';
 import { ChallengesProvider } from './ChallengesContext';
-import { ReactNode } from 'react';
 
 interface AppProviderProps {
   children: ReactNode;
+  session: any;
 }
 
-export function AppProvider({ children }: AppProviderProps) {
+export function AppProvider({ children, session }: AppProviderProps) {
   return (
-    <PlayerProvider>
-      <ChallengesProvider>
-        {children}
-      </ChallengesProvider>
-    </PlayerProvider>
+    <NextAuthProvider session={session}>
+      <PlayerProvider>
+        <ChallengesProvider>
+          {children}
+        </ChallengesProvider>
+      </PlayerProvider>
+    </NextAuthProvider>
   )
 }

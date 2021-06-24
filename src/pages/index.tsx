@@ -1,26 +1,37 @@
-import { useCallback, useContext, useState } from 'react';
+// import { useCallback, useContext, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Link from 'next/link';
-import { PlayerContext } from '../contexts/PlayerContext';
-import { FiArrowRight } from 'react-icons/fi';
+import { signIn, useSession } from 'next-auth/client';
+// import Link from 'next/link';
+// import { PlayerContext } from '../contexts/PlayerContext';
+// import { FiArrowRight } from 'react-icons/fi';
 
 import { AiFillGithub } from 'react-icons/ai';
 
 import backgroundLogo from '../assets/back-logo.svg';
 import logoImg from '../assets/logo.png';
-import {Button} from '../components/Button';
-import Input from '../components/Input';
+import { SignInWithGithub } from '../components/SignInWithGithub';
+// import Input from '../components/Input';
 
 import { Container, Content, Wrapper } from '../styles/pages/Home';
+import { useRouter } from 'next/router';
+import { withSSRGuest } from '../utils/withSSRGuest';
 
 export default function Home() {
-  const [username, setUsername] = useState('');
+  const [session] = useSession();
+  const router = useRouter();
 
-  const { findPlayer } = useContext(PlayerContext);
+  console.log(session);
+  // const { findPlayer } = useContext(PlayerContext);
 
-  function handleSubmit() {
-    findPlayer(username);
+  // function handleSubmit() {
+  //   findPlayer(username);
+  // }
+
+  async function handleSingIn() {
+    await signIn('github');
+
+    router.push('/dashboard');
   }
 
   return (
@@ -44,19 +55,16 @@ export default function Home() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit}>
-              <Input name="username" setUsername={setUsername} />
-              <Link href="/dashboard">
-                <a>
-                  <Button>
-                    <FiArrowRight color="#fff" />
-                  </Button>
-                </a>
-              </Link>
-            </form>
+            <SignInWithGithub onClick={handleSingIn} />
           </div>
         </Wrapper>
       </Content>
     </Container>
   )
 }
+
+export const getServerSideProps = withSSRGuest(async () => {
+  return {
+    props: {}
+  }
+})

@@ -12,6 +12,7 @@ export default createGlobalStyle`
     --background: #f2f3f5;
     --gray-line: #dcdde0;
     --text: #666666;
+    --github: #24292E;
     --text-highlight: #b3b9ff;
     --title: #2e384d;
     --red: #e83f5b;

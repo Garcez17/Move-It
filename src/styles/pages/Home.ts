@@ -44,8 +44,7 @@ export const Wrapper = styled.div`
       }
     }
 
-    form {
-      display: flex;
+    button {
       margin-top: 32px;
     }
   }

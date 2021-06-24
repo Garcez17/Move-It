@@ -5,6 +5,7 @@ import { Sidebar } from "../components/Sidebar";
 import { PlayerContext } from '../contexts/PlayerContext';
 
 import { Container, Content } from '../styles/pages/Leaderboard';
+import { withSSRAuth } from '../utils/withSSRAuth';
 
 export default function Leaderboard() {
   const { players } = useContext(PlayerContext);
@@ -61,3 +62,9 @@ export default function Leaderboard() {
     </Container>
   )
 }
+
+export const getServerSideProps = withSSRAuth(async () => {
+  return {
+    props: {}
+  }
+});

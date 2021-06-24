@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/client';
+
 
 import { ChallengesContext } from '../../contexts/ChallengesContext';
 
@@ -17,6 +19,12 @@ export function Sidebar() {
   useEffect(() => {
     setPage(router.pathname);
   }, [router.pathname]);
+
+  async function handleSignOut() {
+    await signOut();
+
+    router.push('/');
+  }
 
   return (
     <Container>
@@ -43,6 +51,7 @@ export function Sidebar() {
           </Link>
         </div>
       </section>
+      <button onClick={handleSignOut}>Sair</button>
     </Container>
   )
 }
