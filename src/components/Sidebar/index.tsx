@@ -9,8 +9,8 @@ import { ChallengesContext } from '../../contexts/ChallengesContext';
 
 import Logo from '../../assets/logomarca.png';
 
-import { Container, Bar } from './styles';
-import { FiAward, FiHome } from 'react-icons/fi';
+import { Container, Bar, Button } from './styles';
+import { FiAward, FiHome, FiLogOut } from 'react-icons/fi';
 
 export function Sidebar() {
   const router = useRouter();
@@ -35,23 +35,24 @@ export function Sidebar() {
       />
 
       <section>
-        <div>
-          <Link href="/dashboard">
-            <a>
-              {page === '/dashboard' && <Bar />}
-              
-              <FiHome color={page === '/dashboard' ? '#5965E0' : '#ACACAC'} />
-            </a>
-          </Link>
-          <Link href="/leaderboard">
-            <a>
-              {page === '/leaderboard' && <Bar />}
-              <FiAward color={page === '/leaderboard' ? '#5965E0' : '#ACACAC'} />
-            </a>
-          </Link>
-        </div>
+        <Link href="/dashboard" passHref>
+          <Button>
+            {page === '/dashboard' && <Bar />}
+            
+            <FiHome color={page === '/dashboard' ? '#5965E0' : '#ACACAC'} />
+          </Button>
+        </Link>
+        <Link href="/leaderboard" passHref>
+          <Button>
+            {page === '/leaderboard' && <Bar />}
+            <FiAward color={page === '/leaderboard' ? '#5965E0' : '#ACACAC'} />
+          </Button>
+        </Link>
       </section>
-      <button onClick={handleSignOut}>Sair</button>
+      
+      <Button onClick={handleSignOut}>
+        <FiLogOut color="#ACACAC" />
+      </Button>
     </Container>
   )
 }

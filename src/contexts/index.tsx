@@ -13,9 +13,7 @@ export function AppProvider({ children, session }: AppProviderProps) {
   return (
     <NextAuthProvider session={session}>
       <PlayerProvider>
-        <ChallengesProvider>
-          {children}
-        </ChallengesProvider>
+        {children}
       </PlayerProvider>
     </NextAuthProvider>
   )

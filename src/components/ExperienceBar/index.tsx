@@ -1,20 +1,16 @@
 import React, { useContext, useMemo } from 'react';
-import { ChallengesContext } from '../../contexts/ChallengesContext';
+import { ChallengesContext, useChallenge } from '../../contexts/ChallengesContext';
 import { PlayerContext } from '../../contexts/PlayerContext';
 
 import { Container } from './styles';
 
-const ExperienceBar: React.FC = () => {
-  const { experienceToNextLevel } = useContext(ChallengesContext);
-  const { player } = useContext(PlayerContext);
+export function ExperienceBar() {
+  const { experienceToNextLevel, currentExperience } = useChallenge();
+  // const { player } = useContext(PlayerContext);
 
   const percentToNextLevel = useMemo(() => {
-    if (player) {
-      return Math.round(player.currentExperience * 100) / experienceToNextLevel;
-    } else {
-      return 0;
-    }
-  }, [experienceToNextLevel, player]);
+    return Math.round(currentExperience * 100) / experienceToNextLevel;
+  }, [experienceToNextLevel, currentExperience]);
 
   return (
     <Container>
@@ -23,12 +19,10 @@ const ExperienceBar: React.FC = () => {
         <div style={{ width: `${percentToNextLevel}%` }} />
 
         <span style={{ left: `${percentToNextLevel}%` }}>
-          {player ? player.currentExperience : 0} xp
+          {currentExperience} xp
         </span>
       </div>
       <span>{experienceToNextLevel} xp</span>
     </Container>
   );
 }
-
-export default ExperienceBar;

@@ -3,18 +3,24 @@ import { ChallengesContext } from '../../contexts/ChallengesContext';
 import { PlayerContext } from '../../contexts/PlayerContext';
 import { Container } from './styles';
 
-export function Profile() {
-  const { player } = useContext(PlayerContext);
+type ProfileProps = {
+  image_url: string;
+  name: string;
+  level: number;
+}
+
+export function Profile({ image_url, level, name }: ProfileProps) {
+  // const { player } = useContext(PlayerContext);
 
   return (
     <Container>
-      <img src={player ? player.image_url : null} alt={player ? player.name : 'Carregando...'}/>
+      <img src={image_url} alt={name}/>
 
       <div>
-        <strong>{player ? player.name : 'Carregando...'}</strong>
+        <strong>{name}</strong>
         <p>
           <img src="icons/level.svg" alt="Level"/>
-          Level {player ? player.level: 'Carregando...'}
+          Level {level}
         </p>
       </div>
     </Container>

@@ -4,6 +4,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   height: 100vh;
   width: 112px;
   background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
@@ -11,43 +12,47 @@ export const Container = styled.div`
   box-shadow: 0 0 60px rgba(0, 0, 0, 0.05);
 
   section {
-    flex: 1;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 16px;
+  }
 
-    > div {
-      width: 100%;
-
-      > a {
-        cursor: pointer;
-        position: relative;
-        height: 56px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        svg {
-          width: 32px;
-          height: 32px;
-        }
-      }
-
-      a + a {
-        margin-top: 16px;
-      }
-    }
+  svg {
+    width: 32px;
+    height: 32px;
   }
 `;
 
 export const Bar = styled.div`
   height: 100%;
-  width: 4px;
-  background: var(--blue);
+  width: 8px;
   position: absolute;
+  background: var(--blue);
   top: 0;
   left: 0;
   border-radius: 0px 5px 5px 0px;
+`;
+
+export const Button = styled.button`
+  width: 100%;
+  height: 56px;
+
+  position: relative;
+
+  background: transparent;
+  border: 0;
+  
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: filter 0.2s;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
 `;

@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import challanges from '../../challenges.json';
 import { LevelUpModal } from "../components/LevelUpModal";
 import { PlayerContext } from "./PlayerContext";
+import { api } from "../services/api";
 
 interface Challenge {
   type: 'body' | 'eye';
@@ -13,6 +14,9 @@ interface Challenge {
 interface ChallengesContextData {
   activeChallenge: Challenge;
   experienceToNextLevel: number;
+  currentExperience: number;
+  challengesCompleted: number;
+  level: number;
   levelUp: () => void;
   startNewChallenge: () => void;
   resetChallenge: () => void;
@@ -24,24 +28,37 @@ export const ChallengesContext = createContext({} as ChallengesContextData);
 
 interface ChallengesProviderProps {
   children: ReactNode;
+  email: string;
+  level: number;
+  currentExperience: number;
+  challengesCompleted: number;
+  total_experience: number;
 }
 
 export function ChallengesProvider({ children, ...rest }: ChallengesProviderProps) {
-  const { player,  updatePlayer } = useContext(PlayerContext);
+  // const { player,  updatePlayer } = useContext(PlayerContext);
 
+  const [level, setLevel] = useState(rest.level);
+  const [currentExperience, setCurrentExperience] = useState(rest.currentExperience);
+  const [totalExperience, setTotalExprerience] = useState(rest.total_experience);
+  const [challengesCompleted, setChallengesCompleted] = useState(rest.challengesCompleted);
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
-  const [experienceToNextLevel, setExperienceToNextLevel] = useState(player ? Math.pow((player.level + 1) * 4, 2) : 0);
   const [activeChallenge, setActiveChallenge] = useState<Challenge>(null);
+  const experienceToNextLevel = Math.pow(((level + 1) * 4), 2);
 
-  useEffect(() => {
-    if (player) setExperienceToNextLevel(Math.pow((player.level + 1) * 4, 2));
-  }, [player?.level]);
+  // console.log({
+  //   level,
+  //   currentExperience,
+  //   totalExperience,
+  //   challengesCompleted,
+  // });
 
   useEffect(() => {
     Notification.requestPermission();
   }, []);
 
   function levelUp() {
+    setLevel(oldState => oldState + 1);
     setIsLevelUpModalOpen(true);
   }
 
@@ -69,19 +86,44 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
     setActiveChallenge(null);
   }
 
-  function completeChallenge() {
+  async function completeChallenge() {
     if (!activeChallenge) return;
+
+    const { email } = rest;
 
     const { amount } = activeChallenge;
 
-    let finalExperience = player.currentExperience + amount;
+    let finalExperience = currentExperience + amount;
+
+    const updatedChallengesCompleted = challengesCompleted + 1;
+    const updatedTotalExperience = totalExperience + amount;
 
     if (finalExperience >= experienceToNextLevel) {
       finalExperience = finalExperience - experienceToNextLevel;
       levelUp();
+
+      await api.post('/users', {
+        email,
+        level: level + 1,
+        current_experience: finalExperience,
+        total_experience: updatedTotalExperience,
+        challenges_completed: updatedChallengesCompleted,
+      });
+    } else {
+      await api.post('/users', {
+        email,
+        level,
+        currentExperience: finalExperience,
+        totalExperience: updatedTotalExperience,
+        challengesCompleted: updatedChallengesCompleted,
+      });
     }
 
-    updatePlayer(player.username, amount, experienceToNextLevel);
+    setChallengesCompleted(updatedChallengesCompleted);
+    setCurrentExperience(finalExperience);
+    setTotalExprerience(updatedTotalExperience);
+
+    // updatePlayer(player.username, amount, experienceToNextLevel);
 
     setActiveChallenge(null);
   }
@@ -89,7 +131,10 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
   return (
     <ChallengesContext.Provider value={{ 
       experienceToNextLevel,
+      challengesCompleted,
       levelUp,
+      level,
+      currentExperience,
       startNewChallenge,
       activeChallenge,
       resetChallenge,
@@ -102,3 +147,5 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
     </ChallengesContext.Provider>
   )
 }
+
+export const useChallenge = (): ChallengesContextData => useContext(ChallengesContext);

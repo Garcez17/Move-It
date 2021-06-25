@@ -21,24 +21,44 @@ export default NextAuth({
       const total_experience = 0;
       const level = 1;
 
-      await fauna.query(
-        q.Create(
-          q.Collection('users'),
-          {
-            data: { 
-              email,
-              image,
-              name,
-              level,
-              total_experience,
-              current_experience,
-              challenges_completed,
-            }
-          }
+      try {
+        await fauna.query(
+          q.If(
+            q.Not(
+              q.Exists(
+                q.Match(
+                  q.Index('user_by_email'),
+                  q.Casefold(email),
+                )
+              )
+            ),
+            q.Create(
+              q.Collection('users'),
+              {
+                data: { 
+                  email,
+                  image,
+                  name,
+                  level,
+                  total_experience,
+                  current_experience,
+                  challenges_completed,
+                }
+              }
+            ),
+            q.Get(
+              q.Match(
+                q.Index('user_by_email'),
+                q.Casefold(email),
+              )
+            )
+          )
         )
-      )
-
-      return true;
+  
+        return true;
+      } catch {
+        return false;
+      }
     }
   }
 });
