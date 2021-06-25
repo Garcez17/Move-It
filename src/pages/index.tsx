@@ -1,31 +1,19 @@
-// import { useCallback, useContext, useState } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { signIn, useSession } from 'next-auth/client';
-// import Link from 'next/link';
-// import { PlayerContext } from '../contexts/PlayerContext';
-// import { FiArrowRight } from 'react-icons/fi';
+import { signIn } from 'next-auth/client';
 
 import { AiFillGithub } from 'react-icons/ai';
 
 import backgroundLogo from '../assets/back-logo.svg';
 import logoImg from '../assets/logo.png';
 import { SignInWithGithub } from '../components/SignInWithGithub';
-// import Input from '../components/Input';
 
 import { Container, Content, Wrapper } from '../styles/pages/Home';
 import { useRouter } from 'next/router';
 import { withSSRGuest } from '../utils/withSSRGuest';
 
 export default function Home() {
-  const [session] = useSession();
   const router = useRouter();
-
-  // const { findPlayer } = useContext(PlayerContext);
-
-  // function handleSubmit() {
-  //   findPlayer(username);
-  // }
 
   async function handleSingIn() {
     await signIn('github');

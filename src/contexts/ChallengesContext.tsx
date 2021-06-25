@@ -1,8 +1,6 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import Cookies from 'js-cookie';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import challanges from '../../challenges.json';
 import { LevelUpModal } from "../components/LevelUpModal";
-import { PlayerContext } from "./PlayerContext";
 import { api } from "../services/api";
 
 interface Challenge {
@@ -46,27 +44,20 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
   const [activeChallenge, setActiveChallenge] = useState<Challenge>(null);
   const experienceToNextLevel = Math.pow(((level + 1) * 4), 2);
 
-  // console.log({
-  //   level,
-  //   currentExperience,
-  //   totalExperience,
-  //   challengesCompleted,
-  // });
-
   useEffect(() => {
     Notification.requestPermission();
   }, []);
 
-  function levelUp() {
+  const levelUp = useCallback(() => {
     setLevel(oldState => oldState + 1);
     setIsLevelUpModalOpen(true);
-  }
+  }, [level]);
 
-  function closeLevelUpModal() {
+  const closeLevelUpModal = useCallback(() => {
     setIsLevelUpModalOpen(false);
-  }
+  }, []);
 
-  function startNewChallenge() {
+  const startNewChallenge = useCallback(() => {
     const randomChallangeIndex = Math.floor(Math.random() * challanges.length);
     const challange = challanges[randomChallangeIndex] as Challenge;
 
@@ -80,13 +71,13 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
         icon: '/favicon.png',
       })
     }
-  }
+  }, [challanges]);
 
-  function resetChallenge() {
+  const resetChallenge = useCallback(() => {
     setActiveChallenge(null);
-  }
+  }, []);
 
-  async function completeChallenge() {
+  const completeChallenge = useCallback(async () => {
     if (!activeChallenge) return;
 
     const { email } = rest;
@@ -123,10 +114,16 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
     setCurrentExperience(finalExperience);
     setTotalExprerience(updatedTotalExperience);
 
-    // updatePlayer(player.username, amount, experienceToNextLevel);
-
     setActiveChallenge(null);
-  }
+  }, 
+  [
+    rest, 
+    activeChallenge, 
+    currentExperience, 
+    challengesCompleted, 
+    totalExperience, 
+    experienceToNextLevel
+  ]);
 
   return (
     <ChallengesContext.Provider value={{ 

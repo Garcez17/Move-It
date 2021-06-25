@@ -1,8 +1,6 @@
 import Head from 'next/head';
-import { useContext, useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 
-import { PlayerContext } from '../contexts/PlayerContext';
 import { ChallengesProvider } from '../contexts/ChallengesContext';
 import { CountdownProvider } from '../contexts/CountdownContext';
 
@@ -31,8 +29,6 @@ type DashboardProps = {
 }
 
 export default function Dashboard({ user }: DashboardProps) {
-  const { player } = useContext(PlayerContext);
-
   return (
     <ChallengesProvider
       email={user.email}
@@ -55,7 +51,6 @@ export default function Dashboard({ user }: DashboardProps) {
                 <div>
                   <Profile
                     image_url={user.image}
-                    level={user.level}
                     name={user.name}
                   />
                   <CompletedChallenges />

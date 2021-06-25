@@ -1,17 +1,13 @@
-import { useContext } from 'react';
-import { ChallengesContext } from '../../contexts/ChallengesContext';
-import { PlayerContext } from '../../contexts/PlayerContext';
+import { useChallenge } from '../../contexts/ChallengesContext';
 import { Container } from './styles';
 
 type ProfileProps = {
   image_url: string;
   name: string;
-  level: number;
 }
 
-export function Profile({ image_url, level, name }: ProfileProps) {
-  // const { player } = useContext(PlayerContext);
-
+export function Profile({ image_url, name }: ProfileProps) {
+  const { level } = useChallenge();
   return (
     <Container>
       <img src={image_url} alt={name}/>

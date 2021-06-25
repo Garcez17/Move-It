@@ -20,6 +20,10 @@ export type User = {
   }
 }
 
+type Users = {
+  data: User[];
+}
+
 type Req = IncomingMessage & {
   cookies: NextApiRequestCookies;
 }
@@ -37,6 +41,19 @@ export async function loadUser(req: Req) {
   );
 
   return user;
+}
+
+export async function loadUsers() {
+  const users = await fauna.query<Users>(
+    q.Map(
+      q.Paginate(
+        q.Match(q.Index("all_users"))
+      ),
+      q.Lambda("X", q.Get(q.Var("X")))
+    )
+  );
+
+  return users;
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {

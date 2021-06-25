@@ -1,13 +1,21 @@
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { BsPlayFill } from 'react-icons/bs';
 import { FiX } from 'react-icons/fi';
 import { HiCheckCircle } from 'react-icons/hi';
 
-import { CountdownContext } from '../../contexts/CountdownContext';
+import { useCountdown } from '../../contexts/CountdownContext';
 import { Container, Button, ProgressBar, Bar } from './styles';
 
 export function Countdown() {
-  const { minutes, seconds, totalTime, hasFinished, resetCountdown, isActive, startCountdown } = useContext(CountdownContext);
+  const { 
+    minutes, 
+    seconds, 
+    totalTime, 
+    hasFinished, 
+    resetCountdown, 
+    isActive, 
+    startCountdown 
+  } = useCountdown();
 
   const [minuteLeft, minuteRight] = useMemo(() => {
     return String(minutes).padStart(2, '0').split('');

@@ -1,11 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/client';
-
-
-import { ChallengesContext } from '../../contexts/ChallengesContext';
 
 import Logo from '../../assets/logomarca.png';
 

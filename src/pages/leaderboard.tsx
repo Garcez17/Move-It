@@ -1,15 +1,24 @@
-import { useContext } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
 import { Sidebar } from "../components/Sidebar";
-import { PlayerContext } from '../contexts/PlayerContext';
 
 import { Container, Content } from '../styles/pages/Leaderboard';
 import { withSSRAuth } from '../utils/withSSRAuth';
+import { loadUsers } from './api/users';
 
-export default function Leaderboard() {
-  const { players } = useContext(PlayerContext);
-  
+type LeaderboardProps = {
+  users: Array<{
+    id: string;
+    email: string;
+    image: string;
+    name: string;
+    level: number;
+    total_experience: number;
+    current_experience: number;
+    challenges_completed: number;
+  }>
+}
+
+export default function Leaderboard({ users }: LeaderboardProps) {
   return (
     <Container>
       <Head>
@@ -31,31 +40,38 @@ export default function Leaderboard() {
           </thead>
 
           <tbody>
-            {players.map((player, index) => (
-              <tr key={player.username}>
-                <td>{index + 1}</td>
-                <td>
-                  <img src={player.image_url} alt="Gabriel Garcez"/>
-                  <div>
-                    <strong>
-                      {player.name}
-                    </strong>
-                    <span>
-                      <img src='icons/level.svg' width={14} height={16} />
-                      Level {player.level}
-                    </span>
-                  </div>
-                </td>
-                <td>
-                  <span>{player.challengesCompleted}</span>
-                  completados
-                </td>
-                <td>
-                  <span>{player.total_experience}</span>
-                  xp
-                </td>
+            {users.length > 0 ? (
+              users.map((player, index) => (
+                <tr key={player.id}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <img src={player.image} alt={player.name}/>
+                    <div>
+                      <strong>
+                        {player.name}
+                      </strong>
+                      <span>
+                        <img src='icons/level.svg' width={14} height={16} />
+                        Level {player.level}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span>{player.challenges_completed}</span>
+                    completados
+                  </td>
+                  <td>
+                    <span>{player.total_experience}</span>
+                    xp
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td>1</td>
+                <td>dale</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </Content>
@@ -64,7 +80,19 @@ export default function Leaderboard() {
 }
 
 export const getServerSideProps = withSSRAuth(async () => {
+  const users = await loadUsers();
+
+  const filteredUsers = users.data.map(user => {
+    const { id } = user.ref;
+    return {
+      id,
+      ...user.data,
+    }
+  });
+
   return {
-    props: {}
+    props: {
+      users: filteredUsers,
+    }
   }
 });

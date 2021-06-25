@@ -1,7 +1,5 @@
-import { useContext } from 'react';
 import { ImTwitter } from 'react-icons/im';
-import { ChallengesContext, useChallenge } from '../../contexts/ChallengesContext';
-import { PlayerContext } from '../../contexts/PlayerContext';
+import { useChallenge } from '../../contexts/ChallengesContext';
 import { Overlay, Container, Wrapper } from './styles';
 
 export function LevelUpModal() {
