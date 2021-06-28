@@ -7,8 +7,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <AppProvider session={pageProps.session}>
         <Component {...pageProps} />
+        <GlobalStyles />
       </AppProvider>
-      <GlobalStyles />
     </>
   )
 }

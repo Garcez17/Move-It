@@ -14,8 +14,8 @@ export const Container = styled.div`
     align-items: center;
     justify-content: space-evenly;
 
-    background: var(--white);
-    box-shadow: 0 0 60px rgba(0, 0, 0, 0.05);
+    background: var(--background-secondary);
+    box-shadow: ${props => props.theme.title === 'light' ? '0 0 60px rgba(0, 0, 0, 0.05)' : ''};
     border-radius: 5px;
     font-size: 8.5rem;
     text-align: center;
@@ -25,11 +25,11 @@ export const Container = styled.div`
     }
 
     span:first-child {
-      border-right: 1px solid #f0f1f3;
+      border-right: 1px solid var(--border-count);
     }
 
     span:last-child {
-      border-left: 1px solid #f0f1f3;
+      border-left: 1px solid var(--border-count);
     }
   }
 
@@ -57,8 +57,8 @@ export const Button = styled.button<ButtonProps>`
   border: 0;
   border-radius: ${props => props.active ? '5px 5px 0 0' : '5px'};
 
-  background: ${props => props.active ? 'var(--white)' : 'var(--blue)'};
-  color: ${props => props.active ? 'var(--title)' : 'var(--white)'};
+  background: ${props => props.active ? 'var(--background-secondary)' : 'var(--blue)'};
+  color: ${props => props.active ? 'var(--title)' : '#f2f3f5'};
 
   font-size: 1.25rem;
   font-weight: 600;
@@ -66,20 +66,22 @@ export const Button = styled.button<ButtonProps>`
   transition: 0.2s;
 
   :not(:disabled):hover {
-    background: ${props => props.active ? 'var(--red)' : 'var(--blue-dark)'};
-    color: ${props => props.active ? 'var(--white)' : ''};
+    filter: brightness(0.8);
+    background: ${props => props.active ? 'var(--red)' : ''};
+    color: ${props => props.active ? props.theme.title === 'dark' ? 'var(--text-button)' : 'var(--background-secondary)' : 'var(--text-button)'};
 
     svg {
-      color: var(--white) !important;
+      color: ${props => props.active ? props.theme.title === 'dark' ? 'var(--text-button)' : 'var(--background-secondary)' : 'var(--text-button)'};
     }
   }
 
   svg {
     margin-left: 8px;
+    color: ${props => props.active ? 'var(--title)' : 'var(--text-button)'};
   }
 
   :disabled {
-    background: var(--white);
+    background: var(--background-secondary);
     color: var(--title);
     cursor: not-allowed;
   }

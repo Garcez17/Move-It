@@ -7,9 +7,30 @@ export const Container = styled.div`
   justify-content: space-between;
   height: 100vh;
   width: 112px;
-  background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(180deg, var(--background-secondary) 0%, rgba(255, 255, 255, 0) 100%);
   padding: 32px 0;
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.05);
+  box-shadow: ${props => props.theme.title === 'light' ? '0 0 60px rgba(0, 0, 0, 0.05)' : ''};
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+
+    .switch {
+      > div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    > svg {
+      width: 8px;
+      height: 8px;
+    }
+  }
 
   section {
     width: 100%;
@@ -18,11 +39,11 @@ export const Container = styled.div`
     align-items: center;
     justify-content: center;
     gap: 16px;
-  }
 
-  svg {
-    width: 32px;
-    height: 32px;
+    svg {
+      width: 32px;
+      height: 32px;
+    }
   }
 `;
 
@@ -51,6 +72,11 @@ export const Button = styled.button`
   justify-content: center;
 
   transition: filter 0.2s;
+
+  svg {
+    width: 32px;
+    height: 32px;
+  }
 
   &:hover {
     filter: brightness(0.8);

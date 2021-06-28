@@ -18,10 +18,10 @@ export function LevelUpModal() {
             <img src="/icons/close.svg" alt="close"/>
           </button>
         </Wrapper>
-        <button>
+        {/* <button>
           Compartilhar no twitter
           <ImTwitter size={24} color="#2AA9E0" />
-        </button>
+        </button> */}
       </Container>
     </Overlay>
   )

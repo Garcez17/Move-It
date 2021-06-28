@@ -13,7 +13,7 @@ export const Content = styled.div`
   h1 {
     font-size: 2.25rem;
     line-height: 2.9rem;
-    color: #2E384D;
+    color: var(--title);
   }
 
   table {
@@ -22,7 +22,7 @@ export const Content = styled.div`
     border-spacing: 0 0.5rem;
 
     th {
-      color: #666666;
+      color: ${props => props.theme.title === 'dark' ? '#999999' : '#666666'};
       font-size: 0.875rem;
       font-weight: 700;
       text-align: left;
@@ -39,10 +39,10 @@ export const Content = styled.div`
       border: 0;
       font-weight: 500;
       font-size: 1rem;
-      background: #fff;
+      background: var(--background-secondary);
 
       > span {
-        color: #5965E0;
+        color: var(--blue-dark);
         font-weight: 500;
         margin-right: 0.25rem;
       }
@@ -52,7 +52,7 @@ export const Content = styled.div`
       width: 96px;
       text-align: center;
       border-radius: 5px 0 0 5px;
-      color: #666666;
+      color: ${props => props.theme.title === 'dark' ? '#999999' : '#666666'};
       font-size: 1.5rem;
     }
 
@@ -72,7 +72,7 @@ export const Content = styled.div`
         margin-left: 1rem;
 
         strong {
-          color: #2E384D;
+          color: var(--blue-dark);
           font-weight: 600;
           font-size: 1.25rem;
         }
@@ -83,7 +83,7 @@ export const Content = styled.div`
           align-items: center;
           font-size: 1rem;
           font-weight: 400;
-          color: #666666;
+          color: ${props => props.theme.title === 'dark' ? '#999999' : '#666666'};
 
           > img {
             margin-right: 0.5rem;

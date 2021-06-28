@@ -26,7 +26,7 @@ export const Container = styled.div`
     outline: none;
     font-size: 20px;
     font-weight: 500;
-    color: var(--white);
+    color: var(--background-secondary);
 
     ::placeholder {
       font-size: 20px;

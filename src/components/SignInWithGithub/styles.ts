@@ -5,7 +5,7 @@ export const Container = styled.button`
   width: 100%;
   height: 80px;
   background: var(--github);
-  color: var(--background);
+  color: var(--text-button);
   font-size: 24px;
   font-weight: 500;
   display: flex;

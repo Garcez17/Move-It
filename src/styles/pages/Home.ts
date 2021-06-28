@@ -21,7 +21,7 @@ export const Wrapper = styled.div`
     h1 {
       font-size: 2.2rem;
       font-weight: 600;
-      color: var(--white);
+      color: var(--text-button);
       margin-bottom: 24px;
     }
 

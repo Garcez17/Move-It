@@ -8,18 +8,23 @@ export default createGlobalStyle`
   }
 
   :root {
-    --white: #fff;
-    --background: #f2f3f5;
-    --gray-line: #dcdde0;
+    --background-secondary: ${props => props.theme.colors.background.secondary};
+    --background: ${props => props.theme.colors.background.primary};
+    --border-count: ${props => props.theme.colors.border.countdown};
+    --gray-line: ${props => props.theme.colors.border.line};
     --text: #666666;
+    --text-button: #f2f3f5;
+    --button-green: ${props => props.theme.colors.button.green};
+    --button-red: ${props => props.theme.colors.button.red};
     --github: #24292E;
     --text-highlight: #b3b9ff;
-    --title: #2e384d;
+    --title: ${props => props.theme.colors.title};
     --red: #e83f5b;
+    --gray: #ACACAC;
     --green: #4cd62b;
     --blue: #5965e0;
     --text-blue: #B2B9FF;
-    --blue-dark: #4953b8;
+    --blue-dark: ${props => props.theme.colors.blue.dark};
     --blue-twitter: #2aa9e0;
   }
 

@@ -62,7 +62,7 @@ export function Countdown() {
                 onClick={resetCountdown}
               >
                 Abandonar ciclo
-                <FiX color="#2e384d" />
+                <FiX />
               </Button>
               <ProgressBar active>
                 <Bar time={totalTime} />
@@ -75,7 +75,7 @@ export function Countdown() {
                 onClick={startCountdown}
               >
                 Iniciar um ciclo
-                <BsPlayFill color="#fff" />
+                <BsPlayFill />
               </Button>
               <ProgressBar />
             </>

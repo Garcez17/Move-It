@@ -3,9 +3,9 @@ import styled from 'styled-components';
 export const Container = styled.div`
   height: 100%;
 
-  background: var(--white);
+  background: var(--background-secondary);
   border-radius: 5px;
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.05);
+  box-shadow: ${props => props.theme.title === 'light' ? '0 0 60px rgba(0, 0, 0, 0.05)' : ''};
 
   display: flex;
   flex-direction: column;
@@ -80,6 +80,7 @@ export const ChallengeActive = styled.div`
 
       p {
         line-height: 1.5;
+        color: ${props => props.theme.title === 'dark' ? '#999999' : ''};
       }
     }
   }
@@ -92,7 +93,7 @@ export const ChallengeActive = styled.div`
     border-radius: 50%;
 
     button + button {
-      border-left: 1px solid #DCDDE0;
+      border-left: 1px solid var(--gray-line);
     }
 
     button:first-child {
@@ -119,11 +120,11 @@ export const Button = styled.button<ButtonProps>`
   border: 0;
 
   color: ${props => props.background === 'red' ? 'var(--red)' : 'var(--green)'};
-  background: ${props => props.background === 'red' ? '#FFF5F5' : '#F7FFF5'};
+  background: ${props => props.background === 'red' ? 'var(--button-red)' : 'var(--button-green)'};
 
   font-size: 1rem;
   font-weight: 600;
-  border-top: 1px solid #DCDDE0;
+  border-top: 1px solid var(--gray-line);
 
   transition: filter 0.2s;
 

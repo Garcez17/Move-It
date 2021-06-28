@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Overlay = styled.div`
-  background: rgba(242, 243, 245, 0.8);
+  background: ${props => props.theme.title === 'light' ? 'rgba(242, 243, 245, 0.8)' : 'rgba(9, 10, 12, 0.8)'};
   position: fixed;
   top: 0;
   left: 0;
@@ -16,7 +16,7 @@ export const Overlay = styled.div`
 `;
 
 export const Container = styled.div`
-  background: var(--white);
+  background: var(--background-secondary);
   width: 100%;
   max-width: 400px;
   
