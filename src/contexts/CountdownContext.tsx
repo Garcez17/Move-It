@@ -1,28 +1,41 @@
+import Head from "next/head";
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
-import { ChallengesContext } from "./ChallengesContext";
+import { ChallengesContext, useChallenge } from "./ChallengesContext";
+import { useChallengesCountdown } from "./ChallengesCoundownContext";
+
+type Pomodoro = {
+  pom_time: number;
+  pom_break: number;
+  user_id: string;
+}
 
 interface CountdownContextData {
   minutes: number;
   seconds: number;
   totalTime: number;
+  pomodoro: Pomodoro;
   hasFinished: boolean;
   isActive: boolean;
+  handleAddPomodoro: (data: Pomodoro) => void;
   startCountdown: () => void;
   resetCountdown: () => void;
 }
 
 interface CountdownProviderProps {
   children: ReactNode;
+  pomodoroData?: Pomodoro;
 }
 
 let countdownTimeout: NodeJS.Timeout;
 
 export const CountdownContext = createContext({} as CountdownContextData);
 
-export function CountdownProvider({ children }: CountdownProviderProps) {
-  const { startNewChallenge, activeChallenge } = useContext(ChallengesContext);
+export function CountdownProvider({ children, pomodoroData }: CountdownProviderProps) {
+  const { startNewChallenge, playAudio } = useChallenge();
+  const { cycle, hasBreak } = useChallengesCountdown();
   
-  const totalTime = 0.1 * 60;
+  const [pomodoro, setPomodoro] = useState(pomodoroData);
+  const [totalTime, setTotalTime] = useState(/*pomodoro?.pom_time * 60  ||*/ 0.1 * 60);
   const [time, setTime] = useState(totalTime);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
@@ -30,8 +43,28 @@ export function CountdownProvider({ children }: CountdownProviderProps) {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
 
+  useEffect(() => {
+    if (pomodoro) {
+      if (cycle % 2 === 0) {
+        // const { pom_break } = pomodoro;
+        let pom_break = 0.5
+        setTotalTime(pom_break * 60);
+        setTime(pom_break * 60);
+      } else {
+        // const { pom_time } = pomodoro;
+        let pom_time = 0.1
+        setTotalTime(pom_time * 60);
+        setTime(pom_time * 60);
+      }
+    }
+  }, [pomodoro, cycle]);
+
   const startCountdown = useCallback(() => {
     setIsActive(true);
+  }, []);
+
+  const handleAddPomodoro = useCallback((data: Pomodoro) => {
+    setPomodoro(data);
   }, []);
 
   const resetCountdown = useCallback(() => {
@@ -49,7 +82,12 @@ export function CountdownProvider({ children }: CountdownProviderProps) {
     } else if (isActive && time === 0) {
       setHasFinished(true);
       setIsActive(false);
-      startNewChallenge();
+
+      if (!hasBreak) {
+        startNewChallenge();
+      } else {
+        playAudio();
+      }
     }
   }, [time, isActive]);
   
@@ -58,6 +96,8 @@ export function CountdownProvider({ children }: CountdownProviderProps) {
       minutes,
       seconds,
       hasFinished,
+      pomodoro,
+      handleAddPomodoro,
       isActive,
       startCountdown,
       resetCountdown,

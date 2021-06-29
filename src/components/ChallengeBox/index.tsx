@@ -1,4 +1,5 @@
 import { useChallenge } from '../../contexts/ChallengesContext';
+import { useChallengesCountdown } from '../../contexts/ChallengesCoundownContext';
 import { useCountdown } from '../../contexts/CountdownContext';
 import {
   Container,
@@ -8,8 +9,9 @@ import {
 } from './styles';
 
 export function ChallengeBox() {
-  const { activeChallenge, resetChallenge, completeChallenge } = useChallenge();
-  const { resetCountdown } = useCountdown();
+  const { activeChallenge, resetChallenge, completeChallenge, continueCycle } = useChallenge();
+  const { resetCountdown, hasFinished } = useCountdown();
+  const { hasBreak } = useChallengesCountdown();
 
   function handleChallengeSucceeded() {
     completeChallenge();
@@ -18,6 +20,11 @@ export function ChallengeBox() {
 
   function handleChallengeFailed() {
     resetChallenge();
+    resetCountdown();
+  }
+
+  function handleContinuePomodoro() {
+    continueCycle();
     resetCountdown();
   }
 
@@ -57,13 +64,37 @@ export function ChallengeBox() {
             </Button>
           </footer>
         </ChallengeActive>
+      ) : hasBreak ? (
+        <ChallengeNotActive>
+          <article>
+            <strong>Hora do descanso!</strong>
+            <p>
+              <img src="icons/level-up.svg" alt="Level Up"/>
+              Aproveite para tomar uma água ou fazer algo para comer. <br /> Descanse.
+            </p>
+          </article>
+          
+          <footer>
+            {hasFinished && (
+              <Button
+                type="button"
+                background="green"
+                onClick={handleContinuePomodoro}
+              >
+                Prosseguir
+              </Button>
+            )}
+          </footer>
+        </ChallengeNotActive>
       ) : (
         <ChallengeNotActive>
-          <strong>Finalize um ciclo para receber um desafio</strong>
-          <p>
-            <img src="icons/level-up.svg" alt="Level Up"/>
-            Avance de level completando desafios.
-          </p>
+          <article>
+            <strong>Finalize um ciclo para receber um desafio</strong>
+            <p>
+              <img src="icons/level-up.svg" alt="Level Up"/>
+              Avance de level completando desafios.
+            </p>
+          </article>
         </ChallengeNotActive>
       )}
     </Container>

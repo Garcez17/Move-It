@@ -20,6 +20,17 @@ export type User = {
   }
 }
 
+type Pomodoro = {
+  ref: {
+    id: string;
+  };
+  data: {
+    pom_time: number;
+    pom_break: number;
+    user_id: string;
+  }
+}
+
 type Users = {
   data: User[];
 }
@@ -40,7 +51,26 @@ export async function loadUser(req: Req) {
     )
   );
 
-  return user;
+  try {
+    const pomodoro = await fauna.query<Pomodoro>(
+      q.Get(
+        q.Match(
+          q.Index('pomodoro_by_user_id'),
+          q.Casefold(user.ref.id)
+        )
+      )
+    );
+
+    return {
+      user,
+      pomodoro
+    };
+  } catch {
+    return {
+      user,
+      pomodoro: undefined,
+    }
+  }
 }
 
 export async function loadUsers() {

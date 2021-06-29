@@ -2,11 +2,16 @@ import { createContext, ReactNode, useCallback, useContext, useEffect, useState 
 import challanges from '../../challenges.json';
 import { LevelUpModal } from "../components/LevelUpModal";
 import { api } from "../services/api";
+import { useChallengesCountdown } from "./ChallengesCoundownContext";
 
 interface Challenge {
   type: 'body' | 'eye';
   description: string;
   amount: number;
+}
+
+interface BodyData {
+  challenge_amount: number;
 }
 
 interface ChallengesContextData {
@@ -20,6 +25,8 @@ interface ChallengesContextData {
   resetChallenge: () => void;
   completeChallenge: () => void;
   closeLevelUpModal: () => void;
+  continueCycle: () => void;
+  playAudio: (body?: BodyData) => void;
 }
 
 export const ChallengesContext = createContext({} as ChallengesContextData);
@@ -34,8 +41,8 @@ interface ChallengesProviderProps {
 }
 
 export function ChallengesProvider({ children, ...rest }: ChallengesProviderProps) {
-  // const { player,  updatePlayer } = useContext(PlayerContext);
-
+  const { increaseCycle, cycle } = useChallengesCountdown();
+  
   const [level, setLevel] = useState(rest.level);
   const [currentExperience, setCurrentExperience] = useState(rest.currentExperience);
   const [totalExperience, setTotalExprerience] = useState(rest.total_experience);
@@ -46,6 +53,24 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
 
   useEffect(() => {
     Notification.requestPermission();
+  }, []);
+
+  const playAudio = useCallback((body?: BodyData) => {
+    new Audio('/notification.mp3').play();
+
+    if (Notification.permission === 'granted') {
+      if (body) {
+        new Notification('Novo desafio 🎉', {
+          body: `Valendo ${body.challenge_amount} xp`,
+          icon: '/favicon.png',
+        })
+      } else {
+        new Notification('Descanso finalizado 🎉', {
+          body: 'Volte para continuar seu ciclo de pomodoro!',
+          icon: '/favicon.png',
+        })
+      }
+    }
   }, []);
 
   const levelUp = useCallback(() => {
@@ -63,18 +88,16 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
 
     setActiveChallenge(challange);
 
-    new Audio('/notification.mp3').play();
-
-    if (Notification.permission === 'granted') {
-      new Notification('Novo desafio 🎉', {
-        body: `Valendo ${challange.amount} xp`,
-        icon: '/favicon.png',
-      })
-    }
+    playAudio({ challenge_amount: challange.amount});
   }, [challanges]);
 
   const resetChallenge = useCallback(() => {
+    increaseCycle();
     setActiveChallenge(null);
+  }, []);
+
+  const continueCycle = useCallback(() => {
+    increaseCycle();
   }, []);
 
   const completeChallenge = useCallback(async () => {
@@ -104,15 +127,16 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
       await api.post('/users', {
         email,
         level,
-        currentExperience: finalExperience,
-        totalExperience: updatedTotalExperience,
-        challengesCompleted: updatedChallengesCompleted,
+        current_experience: finalExperience,
+        total_experience: updatedTotalExperience,
+        challenges_completed: updatedChallengesCompleted,
       });
     }
 
     setChallengesCompleted(updatedChallengesCompleted);
     setCurrentExperience(finalExperience);
     setTotalExprerience(updatedTotalExperience);
+    increaseCycle();
 
     setActiveChallenge(null);
   }, 
@@ -137,10 +161,12 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
       resetChallenge,
       completeChallenge,
       closeLevelUpModal,
+      continueCycle,
+      playAudio,
     }}>
       {children}
 
-      {isLevelUpModalOpen && <LevelUpModal />}
+      {isLevelUpModalOpen && <LevelUpModal isOpen={isLevelUpModalOpen} onRequestClose={closeLevelUpModal} />}
     </ChallengesContext.Provider>
   )
 }

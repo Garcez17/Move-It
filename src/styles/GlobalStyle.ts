@@ -58,4 +58,19 @@ export default createGlobalStyle`
     color: inherit;
     text-decoration: none;
   }
+
+  .react-modal-overlay {
+    background: ${props => props.theme.title === 'light' ? 'rgba(242, 243, 245, 0.8)' : 'rgba(9, 10, 12, 0.8)'};
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    backdrop-filter: blur(3px);
+  }
 `;

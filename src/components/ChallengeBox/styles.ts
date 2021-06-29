@@ -16,27 +16,44 @@ export const Container = styled.div`
 `;
 
 export const ChallengeNotActive = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 1.5rem 2rem;
 
-  strong {
-    font-size: 1.5rem;
-    font-weight: 500;
-    line-height: 1.4;
-  }
-
-  p {
+  article {
     display: flex;
     flex-direction: column;
     align-items: center;
-    line-height: 1.4;
-    max-width: 70%;
-    margin-top: 3rem;
+    justify-content: center;
+    flex: 1;
+    
+    strong {
+      font-size: 1.5rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
 
-    > img {
-      margin-bottom: 1rem;
+    p {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.4;
+      max-width: 90%;
+      margin-top: 3rem;
+
+      > img {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  footer {
+    width: 100%;
+    height: 80px;
+    border-radius: 50%;
+
+    button {
+      border-radius: 0 0 5px 5px;
     }
   }
 `;

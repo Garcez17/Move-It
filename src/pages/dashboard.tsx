@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 
 import { ChallengesProvider } from '../contexts/ChallengesContext';
-import { CountdownProvider } from '../contexts/CountdownContext';
+import { CountdownProvider, useCountdown } from '../contexts/CountdownContext';
 
 import { ExperienceBar } from '../components/ExperienceBar';
 import { Profile } from '../components/Profile';
@@ -10,6 +10,7 @@ import { CompletedChallenges } from '../components/CompletedChallenges';
 import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
 import { Sidebar } from '../components/Sidebar';
+import { WelcomeModal } from '../components/WelcomeModal';
 
 import { withSSRAuth } from '../utils/withSSRAuth';
 import { loadUser } from './api/users';
@@ -18,6 +19,7 @@ import { Container, Content } from '../styles/pages/Dashboard';
 
 type DashboardProps = {
   user: {
+    id: string;
     email: string;
     image: string;
     name: string;
@@ -25,10 +27,17 @@ type DashboardProps = {
     total_experience: number;
     current_experience: number;
     challenges_completed: number;
-  }
+  };
+  pomodoroData: {
+    pom_time: number;
+    pom_break: number;
+    user_id: string;
+  };
 }
 
-export default function Dashboard({ user }: DashboardProps) {
+export default function Dashboard({ user, pomodoroData }: DashboardProps) {
+  const { pomodoro } = useCountdown();
+
   return (
     <ChallengesProvider
       email={user.email}
@@ -46,7 +55,8 @@ export default function Dashboard({ user }: DashboardProps) {
           <div>
             <ExperienceBar />
 
-            <CountdownProvider>
+            <CountdownProvider pomodoroData={pomodoroData}>
+              {!pomodoro && <WelcomeModal userId={user.id} />}
               <section>
                 <div>
                   <Profile
@@ -69,11 +79,35 @@ export default function Dashboard({ user }: DashboardProps) {
 }
 
 export const getServerSideProps: GetServerSideProps = withSSRAuth(async (ctx) => {
-  const user = await loadUser(ctx.req);
+  const { user, pomodoro } = await loadUser(ctx.req);
 
-  return {
-    props: {
-      user: user.data,
+  const { id: user_id } = user.ref;
+
+  const userData = {
+    id: user_id,
+    ...user.data,
+  }
+
+  if (pomodoro) {
+    const { id: pomodoro_id } = pomodoro?.ref;
+  
+    const pomodoroData = {
+      pomodoro_id,
+      ...pomodoro.data,
+    }
+  
+    return {
+      props: {
+        user: userData,
+        pomodoroData: pomodoroData,
+      }
+    }
+  } else {
+    return {
+      props: {
+        user: userData,
+        pomodoroData: null,
+      } 
     }
   }
 });

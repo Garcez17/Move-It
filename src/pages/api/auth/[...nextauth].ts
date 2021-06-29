@@ -20,6 +20,8 @@ export default NextAuth({
       const current_experience = 0;
       const total_experience = 0;
       const level = 1;
+      const coins = 0;
+      const pomodoros_completed = 0;
 
       try {
         await fauna.query(
@@ -43,6 +45,8 @@ export default NextAuth({
                   total_experience,
                   current_experience,
                   challenges_completed,
+                  coins,
+                  pomodoros_completed,
                 }
               }
             ),

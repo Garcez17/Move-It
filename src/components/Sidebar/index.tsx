@@ -14,7 +14,7 @@ import { Container, Bar, Button } from './styles';
 
 const Switch = dynamic(() => {
   return import('react-switch');
-})
+});
 
 export function Sidebar() {
   const router = useRouter();
