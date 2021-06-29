@@ -41,7 +41,7 @@ interface ChallengesProviderProps {
 }
 
 export function ChallengesProvider({ children, ...rest }: ChallengesProviderProps) {
-  const { increaseCycle, cycle } = useChallengesCountdown();
+  const { increaseCycle, cycle, resetCycle } = useChallengesCountdown();
   
   const [level, setLevel] = useState(rest.level);
   const [currentExperience, setCurrentExperience] = useState(rest.currentExperience);
@@ -97,8 +97,15 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
   }, []);
 
   const continueCycle = useCallback(() => {
-    increaseCycle();
-  }, []);
+    if (cycle === 8) {
+      completePomodoro();
+      resetCycle();
+    } else {
+      increaseCycle();
+    }
+  }, [cycle]);
+
+  const completePomodoro = useCallback(async () => {}, []); // TO DO
 
   const completeChallenge = useCallback(async () => {
     if (!activeChallenge) return;

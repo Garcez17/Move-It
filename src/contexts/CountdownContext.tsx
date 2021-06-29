@@ -47,9 +47,16 @@ export function CountdownProvider({ children, pomodoroData }: CountdownProviderP
     if (pomodoro) {
       if (cycle % 2 === 0) {
         // const { pom_break } = pomodoro;
-        let pom_break = 0.5
-        setTotalTime(pom_break * 60);
-        setTime(pom_break * 60);
+
+        if (cycle === 8) {
+          let pom_break = 0.5 + 0.5;
+          setTotalTime(pom_break * 60);
+          setTime(pom_break * 60);
+        } else {
+          let pom_break = 0.5
+          setTotalTime(pom_break * 60);
+          setTime(pom_break * 60);
+        }
       } else {
         // const { pom_time } = pomodoro;
         let pom_time = 0.1
