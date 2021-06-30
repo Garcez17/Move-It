@@ -27,6 +27,8 @@ type DashboardProps = {
     total_experience: number;
     current_experience: number;
     challenges_completed: number;
+    pomodoros_completed: number;
+    coins: number;
   };
   pomodoroData: {
     pom_time: number;
@@ -42,6 +44,7 @@ export default function Dashboard({ user, pomodoroData }: DashboardProps) {
     <ChallengesProvider
       email={user.email}
       level={user.level}
+      pomodoros_completed={user.pomodoros_completed}
       currentExperience={user.current_experience}
       challengesCompleted={user.challenges_completed}
       total_experience={user.total_experience}

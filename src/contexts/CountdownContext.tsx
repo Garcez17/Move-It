@@ -49,11 +49,11 @@ export function CountdownProvider({ children, pomodoroData }: CountdownProviderP
         // const { pom_break } = pomodoro;
 
         if (cycle === 8) {
-          let pom_break = 0.5 + 0.5;
+          let pom_break = 0.2 + 0.2;
           setTotalTime(pom_break * 60);
           setTime(pom_break * 60);
         } else {
-          let pom_break = 0.5
+          let pom_break = 0.2;
           setTotalTime(pom_break * 60);
           setTime(pom_break * 60);
         }
@@ -79,7 +79,7 @@ export function CountdownProvider({ children, pomodoroData }: CountdownProviderP
     setIsActive(false);
     setTime(totalTime);
     setHasFinished(false);
-  }, []);
+  }, [totalTime]);
 
   useEffect(() => {
     if (isActive && time > 0) {

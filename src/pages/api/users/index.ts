@@ -87,7 +87,7 @@ export async function loadUsers() {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const { level, total_experience, current_experience, challenges_completed, email } = req.body;
+  const { level, total_experience, current_experience, challenges_completed, email, pomodoros_completed } = req.body;
 
   const user = await fauna.query<User>(
     q.Get(
@@ -101,7 +101,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const updatedUser = await fauna.query<User>(
     q.Update(
       q.Ref(q.Collection('users'), user.ref.id),
-      { data: { level, total_experience, current_experience, challenges_completed } },
+      { data: { level, total_experience, current_experience, challenges_completed, pomodoros_completed } },
     )
   );
 

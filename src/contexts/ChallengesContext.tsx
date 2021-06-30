@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import challanges from '../../challenges.json';
 import { LevelUpModal } from "../components/LevelUpModal";
+import { CompletedPomodoroModal } from "../components/CompletedPomodoroModal";
 import { api } from "../services/api";
 import { useChallengesCountdown } from "./ChallengesCoundownContext";
 
@@ -19,12 +20,14 @@ interface ChallengesContextData {
   experienceToNextLevel: number;
   currentExperience: number;
   challengesCompleted: number;
+  pomodorosCompleted: number;
   level: number;
   levelUp: () => void;
   startNewChallenge: () => void;
   resetChallenge: () => void;
   completeChallenge: () => void;
   closeLevelUpModal: () => void;
+  closeCompletePomodoroModal: () => void;
   continueCycle: () => void;
   playAudio: (body?: BodyData) => void;
 }
@@ -38,16 +41,19 @@ interface ChallengesProviderProps {
   currentExperience: number;
   challengesCompleted: number;
   total_experience: number;
+  pomodoros_completed: number;
 }
 
 export function ChallengesProvider({ children, ...rest }: ChallengesProviderProps) {
   const { increaseCycle, cycle, resetCycle } = useChallengesCountdown();
   
   const [level, setLevel] = useState(rest.level);
+  const [pomodorosCompleted, setPomodorosCompleted] = useState(rest.pomodoros_completed);
   const [currentExperience, setCurrentExperience] = useState(rest.currentExperience);
   const [totalExperience, setTotalExprerience] = useState(rest.total_experience);
   const [challengesCompleted, setChallengesCompleted] = useState(rest.challengesCompleted);
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
+  const [isCompletePomodoroOpen, setIsCompletePomodoroOpen] = useState(false);
   const [activeChallenge, setActiveChallenge] = useState<Challenge>(null);
   const experienceToNextLevel = Math.pow(((level + 1) * 4), 2);
 
@@ -82,6 +88,10 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
     setIsLevelUpModalOpen(false);
   }, []);
 
+  const closeCompletePomodoroModal = useCallback(() => {
+    setIsCompletePomodoroOpen(false);
+  }, []);
+
   const startNewChallenge = useCallback(() => {
     const randomChallangeIndex = Math.floor(Math.random() * challanges.length);
     const challange = challanges[randomChallangeIndex] as Challenge;
@@ -96,6 +106,48 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
     setActiveChallenge(null);
   }, []);
 
+  const completePomodoro = useCallback(async () => {
+    setIsCompletePomodoroOpen(true);
+
+    const { email } = rest;
+
+    let finalExperience = currentExperience + 250;
+
+    const updatedTotalExperience = totalExperience + 250;
+    const updatedPomodorosCompleted = pomodorosCompleted + 1;
+
+    if (finalExperience >= experienceToNextLevel) {
+      finalExperience = finalExperience - experienceToNextLevel;
+      levelUp();
+
+      await api.post('/users', {
+        email,
+        level: level + 1,
+        current_experience: finalExperience,
+        total_experience: updatedTotalExperience,
+        pomodoros_completed: updatedPomodorosCompleted,
+      });
+    } else {
+      await api.post('/users', {
+        email,
+        level,
+        current_experience: finalExperience,
+        total_experience: updatedTotalExperience,
+        pomodoros_completed: updatedPomodorosCompleted,
+      });
+    }
+
+    setPomodorosCompleted(updatedPomodorosCompleted)
+    setCurrentExperience(finalExperience);
+    setTotalExprerience(updatedTotalExperience);
+  }, [
+    rest, 
+    currentExperience, 
+    totalExperience, 
+    experienceToNextLevel,
+    pomodorosCompleted,
+  ]);
+
   const continueCycle = useCallback(() => {
     if (cycle === 8) {
       completePomodoro();
@@ -104,8 +156,6 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
       increaseCycle();
     }
   }, [cycle]);
-
-  const completePomodoro = useCallback(async () => {}, []); // TO DO
 
   const completeChallenge = useCallback(async () => {
     if (!activeChallenge) return;
@@ -160,6 +210,7 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
     <ChallengesContext.Provider value={{ 
       experienceToNextLevel,
       challengesCompleted,
+      pomodorosCompleted,
       levelUp,
       level,
       currentExperience,
@@ -168,12 +219,14 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
       resetChallenge,
       completeChallenge,
       closeLevelUpModal,
+      closeCompletePomodoroModal,
       continueCycle,
       playAudio,
     }}>
       {children}
 
       {isLevelUpModalOpen && <LevelUpModal isOpen={isLevelUpModalOpen} onRequestClose={closeLevelUpModal} />}
+      {isCompletePomodoroOpen && <CompletedPomodoroModal isOpen={isCompletePomodoroOpen} onRequestClose={closeCompletePomodoroModal} />}
     </ChallengesContext.Provider>
   )
 }
