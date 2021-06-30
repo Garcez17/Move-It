@@ -35,7 +35,7 @@ export function CountdownProvider({ children, pomodoroData }: CountdownProviderP
   const { cycle, hasBreak } = useChallengesCountdown();
   
   const [pomodoro, setPomodoro] = useState(pomodoroData);
-  const [totalTime, setTotalTime] = useState(/*pomodoro?.pom_time * 60  ||*/ 0.1 * 60);
+  const [totalTime, setTotalTime] = useState(pomodoro?.pom_time * 60 || 0.1 * 60);
   const [time, setTime] = useState(totalTime);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
@@ -45,21 +45,18 @@ export function CountdownProvider({ children, pomodoroData }: CountdownProviderP
 
   useEffect(() => {
     if (pomodoro) {
-      if (cycle % 2 === 0) {
-        // const { pom_break } = pomodoro;
+      const { pom_time } = pomodoro;
+      const { pom_break } = pomodoro;
 
+      if (cycle % 2 === 0) {
         if (cycle === 8) {
-          let pom_break = 0.2 + 0.2;
-          setTotalTime(pom_break * 60);
-          setTime(pom_break * 60);
+          setTotalTime((pom_time + 5) * 60);
+          setTime((pom_time + 5) * 60);
         } else {
-          let pom_break = 0.2;
           setTotalTime(pom_break * 60);
           setTime(pom_break * 60);
         }
       } else {
-        // const { pom_time } = pomodoro;
-        let pom_time = 0.1
         setTotalTime(pom_time * 60);
         setTime(pom_time * 60);
       }
