@@ -1,4 +1,3 @@
-// import { ImTwitter } from 'react-icons/im';
 import Modal from 'react-modal';
 import { useChallenge } from '../../contexts/ChallengesContext';
 import { Container, Wrapper } from './styles';
