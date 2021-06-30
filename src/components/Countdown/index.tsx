@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { BsPlayFill } from 'react-icons/bs';
 import { FiX } from 'react-icons/fi';
 import { HiCheckCircle } from 'react-icons/hi';
+import { useChallengesCountdown } from '../../contexts/ChallengesCoundownContext';
 
 import { useCountdown } from '../../contexts/CountdownContext';
 import { Container, Button, ProgressBar, Bar } from './styles';
@@ -16,6 +17,8 @@ export function Countdown() {
     isActive, 
     startCountdown 
   } = useCountdown();
+
+  const { cycle } = useChallengesCountdown();
 
   const [minuteLeft, minuteRight] = useMemo(() => {
     return String(minutes).padStart(2, '0').split('');
@@ -74,7 +77,7 @@ export function Countdown() {
                 type="button"
                 onClick={startCountdown}
               >
-                Iniciar um ciclo
+                {cycle === 1 ? 'Iniciar pomodoro' : cycle % 2 === 0 ? 'Iniciar descanso' : 'Iniciar ciclo'}
                 <BsPlayFill />
               </Button>
               <ProgressBar />

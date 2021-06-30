@@ -67,6 +67,9 @@ export const Workbar = styled.div`
 
   p {
     color: var(--github);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   svg {

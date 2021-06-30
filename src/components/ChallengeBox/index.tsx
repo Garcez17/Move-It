@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useChallenge } from '../../contexts/ChallengesContext';
 import { useChallengesCountdown } from '../../contexts/ChallengesCoundownContext';
 import { useCountdown } from '../../contexts/CountdownContext';
@@ -11,7 +12,7 @@ import {
 export function ChallengeBox() {
   const { activeChallenge, resetChallenge, completeChallenge, continueCycle } = useChallenge();
   const { resetCountdown, hasFinished } = useCountdown();
-  const { hasBreak } = useChallengesCountdown();
+  const { hasBreak, cycle } = useChallengesCountdown();
 
   function handleChallengeSucceeded() {
     completeChallenge();
@@ -27,6 +28,26 @@ export function ChallengeBox() {
     continueCycle();
     resetCountdown();
   }
+
+  const strongTitle = useMemo(() => {
+    if (cycle === 1) return 'Inicie um pomodoro clicando em inciar pomodoro.';
+
+    if (cycle === 8) return 'Hora de um descanso maior!';
+
+    if (hasBreak) return 'Hora do descanso!';
+
+    return 'Finalize um ciclo para receber um desafio';
+  }, [cycle, hasBreak]);
+
+  const description = useMemo(() => {
+    if (cycle === 1) return 'Ganhe xp ao finalizar todo o pomodoro ou completando desafios durante.';
+
+    if (cycle === 8) return <>Você finalizou os 4 ciclos de foco. <br /> Agora merece um tempo maior de descanso, aproveite!</>;
+
+    if (hasBreak) return <>Aproveite para tomar uma água ou fazer algo para comer.<br />Descanse.</>;
+
+    return 'Ganhe xp completando desafios.';
+  }, [cycle, hasBreak]);
 
   return(
     <Container>
@@ -64,37 +85,43 @@ export function ChallengeBox() {
             </Button>
           </footer>
         </ChallengeActive>
-      ) : hasBreak ? (
-        <ChallengeNotActive>
-          <article>
-            <strong>Hora do descanso!</strong>
-            <p>
-              <img src="icons/level-up.svg" alt="Level Up"/>
-              Aproveite para tomar uma água ou fazer algo para comer. <br /> Descanse.
-            </p>
-          </article>
-          
-          <footer>
-            {hasFinished && (
-              <Button
-                type="button"
-                background="green"
-                onClick={handleContinuePomodoro}
-              >
-                Prosseguir
-              </Button>
-            )}
-          </footer>
-        </ChallengeNotActive>
       ) : (
         <ChallengeNotActive>
           <article>
-            <strong>Finalize um ciclo para receber um desafio</strong>
+            <strong>{strongTitle}</strong>
             <p>
               <img src="icons/level-up.svg" alt="Level Up"/>
-              Avance de level completando desafios.
+              {description}
             </p>
           </article>
+
+          {hasBreak && cycle !== 8 && (
+            <footer>
+              {hasFinished && (
+                <Button
+                  type="button"
+                  background="green"
+                  onClick={handleContinuePomodoro}
+                >
+                  Prosseguir
+                </Button>
+              )}
+            </footer>
+          )}
+
+          {cycle === 8  && (
+            <footer>
+              {hasFinished && (
+                <Button
+                  type="button"
+                  background="green"
+                  onClick={handleContinuePomodoro}
+                >
+                  Finalizar pomodoro
+                </Button>
+              )}
+            </footer>
+          )}
         </ChallengeNotActive>
       )}
     </Container>

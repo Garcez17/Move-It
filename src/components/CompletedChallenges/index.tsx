@@ -31,28 +31,28 @@ export function CompletedChallenges() {
         </header>
         <div>
           <Workbar>
-            {cycle > 1 ? <FiCheck size={32} /> : <p>{pomodoro.pom_time} min</p> }
+            <p>{cycle > 1 ? <FiCheck size={32} /> : `${pomodoro.pom_time} min`}</p>
           </Workbar>
           <Breakbar>
-            {cycle > 2 ? <FiCheck size={24} /> : <p>{pomodoro.pom_break} min</p> }
+            <p>{cycle > 2 ? <FiCheck size={24} /> : `${pomodoro.pom_break} min` }</p>
           </Breakbar>
           <Workbar>
-            {cycle > 3 ? <FiCheck size={32} /> : <p>{pomodoro.pom_time} min</p> }
+            <p>{cycle > 3 ? <FiCheck size={32} /> : `${pomodoro.pom_time} min`}</p>
           </Workbar>
           <Breakbar>
-            {cycle > 4 ? <FiCheck size={24} /> : <p>{pomodoro.pom_break} min</p> }
+            <p>{cycle > 4 ? <FiCheck size={24} /> : `${pomodoro.pom_break} min` }</p>
           </Breakbar>
           <Workbar>
-            {cycle > 5 ? <FiCheck size={32} /> : <p>{pomodoro.pom_time} min</p> }
+            <p>{cycle > 5 ? <FiCheck size={32} /> : `${pomodoro.pom_time} min`}</p>
           </Workbar>
           <Breakbar>
-            {cycle > 6 ? <FiCheck size={24} /> : <p>{pomodoro.pom_break} min</p> }
+            <p>{cycle > 6 ? <FiCheck size={24} /> : `${pomodoro.pom_break} min` }</p>
           </Breakbar>
           <Workbar>
-            {cycle > 7 ? <FiCheck size={32} /> : <p>{pomodoro.pom_time} min</p> }
+            <p>{cycle > 7 ? <FiCheck size={32} /> : `${pomodoro.pom_time} min`}</p>
           </Workbar>
           <Breakbar>
-            {cycle > 8 ? <FiCheck size={24} /> : <p>{pomodoro.pom_time + 5} min</p> }
+            <p>{cycle > 8 ? <FiCheck size={24} /> : `${pomodoro.pom_time + 5} min` }</p>
           </Breakbar>
         </div>
       </Pomodoro>
