@@ -36,7 +36,7 @@ export function CountdownProvider({ children }: CountdownProviderProps) {
   const { startNewChallenge, playAudio } = useChallenge();
   const { cycle, hasBreak } = useChallengesCountdown();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [pomodoro, setPomodoro] = useState(null);
   const [totalTime, setTotalTime] = useState(pomodoro?.pom_time * 60 || 1 * 60);
   const [time, setTime] = useState(totalTime);
@@ -47,7 +47,6 @@ export function CountdownProvider({ children }: CountdownProviderProps) {
   const seconds = time % 60;
 
   const collectData = useCallback((data: any) => {
-    setLoading(true);
     setPomodoro(data.pomodoro);
     setLoading(false);
   }, []);

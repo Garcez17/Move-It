@@ -45,7 +45,7 @@ interface ChallengesProviderProps {
 export function ChallengesProvider({ children }: ChallengesProviderProps) {
   const { increaseCycle, cycle, resetCycle } = useChallengesCountdown();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState(null);
   const [level, setLevel] = useState(null);
   const [pomodorosCompleted, setPomodorosCompleted] = useState(null);
@@ -58,7 +58,6 @@ export function ChallengesProvider({ children }: ChallengesProviderProps) {
   const experienceToNextLevel = Math.pow(((level + 1) * 4), 2);
 
   const collectData = useCallback((data: any) => {
-    setLoading(true);
     setEmail(data.email)
     setLevel(data.level);
     setPomodorosCompleted(data.pomodoros_completed);
