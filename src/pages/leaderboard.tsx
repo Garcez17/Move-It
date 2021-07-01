@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { SEO } from '../components/SEO';
 import { Sidebar } from "../components/Sidebar";
 
 import { Container, Content } from '../styles/pages/Leaderboard';
@@ -21,9 +22,10 @@ type LeaderboardProps = {
 export default function Leaderboard({ users }: LeaderboardProps) {
   return (
     <Container>
-      <Head>
-        <title>Leaderboard | move.it</title>
-      </Head>
+      <SEO
+        title="Leaderboard"
+        shouldIndexPage={false}
+      />
       <Sidebar />
 
       <Content>

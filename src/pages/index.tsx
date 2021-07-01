@@ -1,9 +1,8 @@
-import Head from 'next/head';
 import Image from 'next/image';
 import { signIn } from 'next-auth/client';
-
 import { AiFillGithub } from 'react-icons/ai';
 
+import { SEO } from '../components/SEO';
 import { SignInWithGithub } from '../components/SignInWithGithub';
 
 import { Container, Content, Wrapper } from '../styles/pages/Home';
@@ -21,9 +20,7 @@ export default function Home() {
 
   return (
     <Container>
-      <Head>
-        <title>Login | move.it</title>
-      </Head>
+      <SEO title="Login" />
 
       <Image src="/back-logo.svg" width={768} height={600} />
       <Content>

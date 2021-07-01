@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
-import Head from 'next/head';
 import { BsPlayFill } from 'react-icons/bs';
 import { FiX } from 'react-icons/fi';
 import { HiCheckCircle } from 'react-icons/hi';
+
+import { SEO } from '../SEO';
 
 import { useChallengesCountdown } from '../../hooks/useChallengesCountdown';
 import { useCountdown } from '../../hooks/useCountdown';
@@ -40,9 +41,12 @@ export function Countdown() {
 
   return (
     <div>
-      <Head>
-        <title>{minuteLeft}{minuteRight}:{secondLeft}{secondRight}</title>
-      </Head>
+      {isActive && (
+        <SEO 
+          title={`${minuteLeft}${minuteRight}:${secondLeft}${secondRight} - Ciclo ${cycle}/6`}
+          shouldIndexPage={false}
+        />
+      )}
       <Container>
         <div>
           <span>{minuteLeft}</span>

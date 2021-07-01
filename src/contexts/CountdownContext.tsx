@@ -1,6 +1,5 @@
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { createContext } from 'use-context-selector';
-import Head from 'next/head';
 import { useChallenge } from "../hooks/useChallenge";
 
 import { useChallengesCountdown } from '../hooks/useChallengesCountdown';
@@ -39,11 +38,11 @@ export function CountdownProvider({ children }: CountdownProviderProps) {
 
   const [loading, setLoading] = useState(false);
   const [pomodoro, setPomodoro] = useState(null);
-  const [totalTime, setTotalTime] = useState(/*pomodoro?.pom_time * 60 ||*/ 1 * 60);
+  const [totalTime, setTotalTime] = useState(pomodoro?.pom_time * 60 || 1 * 60);
   const [time, setTime] = useState(totalTime);
   const [isActive, setIsActive] = useState(false);
   const [hasFinished, setHasFinished] = useState(false);
-  
+
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
 
@@ -55,11 +54,8 @@ export function CountdownProvider({ children }: CountdownProviderProps) {
 
   useEffect(() => {
     if (pomodoro) {
-      // const { pom_time } = pomodoro;
-      // const { pom_break } = pomodoro;
-
-      let pom_time = 1;
-      let pom_break = 1;
+      const { pom_time } = pomodoro;
+      const { pom_break } = pomodoro;
 
       if (cycle % 2 === 0) {
         if (cycle === 8) {

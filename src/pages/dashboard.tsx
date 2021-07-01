@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 
+import { SEO } from '../components/SEO';
 import { ExperienceBar } from '../components/ExperienceBar';
 import { Profile } from '../components/Profile';
+import { Loading } from '../components/Loading';
 import { CompletedChallenges } from '../components/CompletedChallenges';
 import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
@@ -16,8 +19,6 @@ import { loadUser } from './api/users';
 import { Container, Content } from '../styles/pages/Dashboard';
 import { useCountdown } from '../hooks/useCountdown';
 import { useChallenge } from '../hooks/useChallenge';
-import { useEffect } from 'react';
-import { Loading } from '../components/Loading';
 
 const WelcomeModal = dynamic<WelcomeModalProps>(() => {
   return import('../components/WelcomeModal').then(mod => mod.WelcomeModal);
@@ -49,7 +50,7 @@ export default function Dashboard({ user, pomodoroData }: DashboardProps) {
     handleAddPomodoro, 
     collectData: countdownCollectData, 
     loading: countdownLoading, 
-    hasFinished, 
+    hasFinished,
     resetCountdown 
   } = useCountdown();
 
@@ -82,9 +83,8 @@ export default function Dashboard({ user, pomodoroData }: DashboardProps) {
     <Container>
       <Sidebar />
       <Content>
-        <Head>
-          <title>{user.name} | move.it</title>
-        </Head>
+        <SEO title={user.name} shouldIndexPage={false} />
+
         <div>
           <ExperienceBar />
 
