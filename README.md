@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://move-it-five.vercel.app/dashboard">Acessar site</a>
+  <a href="https://move-it-five.vercel.app">Acessar site</a>
 </p>
 
 ## Sobre o Projeto
