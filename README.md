@@ -1,34 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h1 align="center">
+  <img alt="move.it" title="move.it" src=".github/logo.png" />
+</h1>
 
-## Getting Started
+<p align="center">
+  <img alt="Happy" src=".github/moveit-dashboard.png" width="100%">
+</p>
 
-First, run the development server:
+<p align="center">
+  <a href="https://move-it-five.vercel.app/dashboard">Acessar site</a>
+</p>
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Sobre o Projeto
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplicação desenvolvida incialmente na NLW #04 da Rocketseat e que foi incrementado por mim para meu portfolio pessoal.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+A ideia do app é aplicar a tecnica de pomodoro trazendo um sistema de gamificação, no qual o usuário vai completando os ciclos/desafios e recebendo experiência por isso.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Funcionalidades
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- Login social com Github
 
-## Learn More
+- Ciclo de pomodoro
+  - No 1º acesso o usuário recebe um modal solicitando o tempo de foco e descanso de cada ciclo.
+  - Ao final do pomodoro o usuário recebe experiência.
+  - Caso complete o desafio, recebe experiência pelo desafio.
 
-To learn more about Next.js, take a look at the following resources:
+- Ranking
+  - Página de Leaderboard contendo o ranking por experiência de cada usuário registrado.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Troca de temas
+  - Opção de tema light ou dark.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Feito com:
+- [ReactJS](https://github.com/facebook/react) - Biblioteca Javascript para construção de interfaces.
+- [Next.js](https://github.com/vercel/next.js) - Framework React JS.
+- [Typescript](https://github.com/microsoft/TypeScript) - Supertset para o Javascript.
+- [FaunaDB](https://fauna.com/) - Banco de dados.
+- [Next-auth](https://github.com/nextauthjs/next-auth) - Sistema de autenticação para Next.js.
+- [Context-Api](https://pt-br.reactjs.org/docs/context.html) - Gerenciamento de estado.
+- [Styled-Components](https://github.com/styled-components/styled-components) - Biblioteca de estilização
+- [React-modal](https://github.com/reactjs/react-modal) - Biblioteca para construção de modal.
+- [React-switch](https://github.com/markusenglund/react-switch) - Biblioteca para construção do botão de switch.
+- [React-hook-form](https://github.com/react-hook-form/react-hook-form) - Biblioteca para forulários.
