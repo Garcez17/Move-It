@@ -3,11 +3,11 @@
 </h1>
 
 <p align="center">
-  <img alt="Happy" src=".github/moveit-dashboard.png" width="100%">
+  <img alt="move.it dashboard" src=".github/moveit-dashboard.png" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://move-it-five.vercel.app/dashboard">Acessar site</a>
+  <a href="https://move-it-five.vercel.app">Acessar site</a>
 </p>
 
 ## Sobre o Projeto
@@ -22,8 +22,17 @@ A ideia do app é aplicar a tecnica de pomodoro trazendo um sistema de gamifica�
 
 - Ciclo de pomodoro
   - No 1º acesso o usuário recebe um modal solicitando o tempo de foco e descanso de cada ciclo.
+  <p align="center">
+    <img alt="welcome modal" src=".github/welcome.png" width="50%">
+  </p>
   - Ao final do pomodoro o usuário recebe experiência.
+  <p align="center">
+    <img alt="Pomodoro finalizado" src=".github/completed-pomodoro.png" width="50%">
+  </p>
   - Caso complete o desafio, recebe experiência pelo desafio.
+  <p align="center">
+    <img alt="Desafio" src=".github/challenge.png" width="50%">
+  </p>
 
 - Ranking
   - Página de Leaderboard contendo o ranking por experiência de cada usuário registrado.
@@ -42,3 +51,24 @@ A ideia do app é aplicar a tecnica de pomodoro trazendo um sistema de gamifica�
 - [React-modal](https://github.com/reactjs/react-modal) - Biblioteca para construção de modal.
 - [React-switch](https://github.com/markusenglund/react-switch) - Biblioteca para construção do botão de switch.
 - [React-hook-form](https://github.com/react-hook-form/react-hook-form) - Biblioteca para forulários.
+
+## Como executar
+
+- Clone do repositório
+```
+$ git clone https://github.com/Garcez17/Move-It
+
+$ cd Move-It
+```
+- Instale as dependências
+```
+$ yarn
+
+ou
+
+$ npm install
+```
+
+## Licença
+
+Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](https://github.com/Garcez17/Move-It/blob/main/LICENSE) para mais detalhes.
