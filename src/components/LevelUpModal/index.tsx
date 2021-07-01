@@ -1,7 +1,8 @@
 // import { ImTwitter } from 'react-icons/im';
 import Modal from 'react-modal';
-import { useChallenge } from '../../contexts/ChallengesContext';
-import { Overlay, Container, Wrapper } from './styles';
+
+import { useChallenge } from '../../hooks/useChallenge';
+import { Container, Wrapper } from './styles';
 
 type LevelUpModalProps = {
   isOpen: boolean;

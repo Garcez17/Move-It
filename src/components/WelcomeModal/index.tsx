@@ -1,26 +1,26 @@
 import Modal from 'react-modal';
 import Image from 'next/image';
-import { useForm, SubmitHandler } from "react-hook-form";
-
-import logoImg from '../../assets/logo.png';
+import { useForm } from "react-hook-form";
 
 import { Container, Wrapper } from './styles';
 import { api } from '../../services/api';
-import { useState } from 'react';
-import { useCountdown } from '../../contexts/CountdownContext';
-
-type WelcomeModalProps = {
-  userId: string;
-}
+import { useCountdown } from '../../hooks/useCountdown';
+import { memo } from 'react';
+import { Pomodoro } from '../../contexts/CountdownContext';
 
 interface IFormData {
   work_time: string;
   break_time: string;
 }
 
-export function WelcomeModal({ userId }: WelcomeModalProps) {
+export type WelcomeModalProps = {
+  userId: string;
+  pomodoro: Pomodoro;
+  handleAddPomodoro: (data: Pomodoro) => void;
+}
+
+function WelcomeModalComponent({ userId, pomodoro, handleAddPomodoro }: WelcomeModalProps) {
   const { register, handleSubmit } = useForm<IFormData>();
-  const { pomodoro, handleAddPomodoro } = useCountdown();
 
   async function handleCreatePomodoro(data: IFormData) {
     const { break_time, work_time } = data;
@@ -47,7 +47,7 @@ export function WelcomeModal({ userId }: WelcomeModalProps) {
         <Wrapper>
           <h1>
             Bem vindo ao
-            <Image src={logoImg} width={200} height={42} />
+            <Image src="/logo.png" width={200} height={42} />
           </h1>
 
           <form onSubmit={handleSubmit(handleCreatePomodoro)}>
@@ -83,3 +83,5 @@ export function WelcomeModal({ userId }: WelcomeModalProps) {
     </Modal>
   )
 }
+
+export const WelcomeModal = memo(WelcomeModalComponent);

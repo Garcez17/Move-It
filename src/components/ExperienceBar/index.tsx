@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
-import { useChallenge } from '../../contexts/ChallengesContext';
+import React, { memo, useMemo } from 'react';
+
+import { useChallenge } from '../../hooks/useChallenge';
 
 import { Container } from './styles';
 
-export function ExperienceBar() {
+function ExperienceBarComponent() {
   const { experienceToNextLevel, currentExperience } = useChallenge();
 
   const percentToNextLevel = useMemo(() => {
@@ -24,3 +25,5 @@ export function ExperienceBar() {
     </Container>
   );
 }
+
+export const ExperienceBar = memo(ExperienceBarComponent);

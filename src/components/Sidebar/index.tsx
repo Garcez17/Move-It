@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { FiAward, FiHome, FiLogOut, FiMoon, FiSun } from 'react-icons/fi';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/client';
-
-import Logo from '../../assets/logomarca.png';
 
 import { useTheme } from '../../hooks/useTheme';
 
@@ -16,7 +14,7 @@ const Switch = dynamic(() => {
   return import('react-switch');
 });
 
-export function Sidebar() {
+function SidebarComponent() {
   const router = useRouter();
   const [page, setPage] = useState(router.pathname);
   const { theme, toogleTheme } = useTheme();
@@ -35,10 +33,10 @@ export function Sidebar() {
     <Container>
       <div>
         <Image
-          src={Logo}
+          src="/logomarca.png"
           width={48} 
           height={42} 
-          alt="Gabriel Garcez"
+          alt="move.it"
         />
 
         {theme && (
@@ -79,3 +77,5 @@ export function Sidebar() {
     </Container>
   )
 }
+
+export const Sidebar = memo(SidebarComponent);

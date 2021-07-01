@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import { Provider as NextAuthProvider } from 'next-auth/client';
 import { ThemeProvider } from '../hooks/useTheme';
 import { ChallengesCountdownProvider } from './ChallengesCoundownContext';
+import { ChallengesProvider } from './ChallengesContext';
+import { CountdownProvider } from './CountdownContext';
 
 interface AppProviderProps {
   children: ReactNode;
@@ -13,7 +15,11 @@ export function AppProvider({ children, session }: AppProviderProps) {
     <NextAuthProvider session={session}>
       <ThemeProvider>
         <ChallengesCountdownProvider>
-          {children}
+          <ChallengesProvider>
+            <CountdownProvider>
+              {children}
+            </CountdownProvider>
+          </ChallengesProvider>
         </ChallengesCountdownProvider>
       </ThemeProvider>
     </NextAuthProvider>

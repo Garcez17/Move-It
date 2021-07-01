@@ -1,4 +1,6 @@
-import { useChallenge } from '../../contexts/ChallengesContext';
+import { memo } from 'react';
+import { useChallenge } from '../../hooks/useChallenge';
+
 import { Container } from './styles';
 
 type ProfileProps = {
@@ -6,8 +8,9 @@ type ProfileProps = {
   name: string;
 }
 
-export function Profile({ image_url, name }: ProfileProps) {
+function ProfileComponent({ image_url, name }: ProfileProps) {
   const { level } = useChallenge();
+
   return (
     <Container>
       <img src={image_url} alt={name}/>
@@ -22,3 +25,5 @@ export function Profile({ image_url, name }: ProfileProps) {
     </Container>
   )
 }
+
+export const Profile = memo(ProfileComponent);

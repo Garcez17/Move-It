@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
+import Head from 'next/head';
 import { BsPlayFill } from 'react-icons/bs';
 import { FiX } from 'react-icons/fi';
 import { HiCheckCircle } from 'react-icons/hi';
-import { useChallengesCountdown } from '../../contexts/ChallengesCoundownContext';
 
-import { useCountdown } from '../../contexts/CountdownContext';
+import { useChallengesCountdown } from '../../hooks/useChallengesCountdown';
+import { useCountdown } from '../../hooks/useCountdown';
+
 import { Container, Button, ProgressBar, Bar } from './styles';
 
 export function Countdown() {
@@ -27,9 +29,20 @@ export function Countdown() {
   const [secondLeft, secondRight] = useMemo(() => {
     return String(seconds).padStart(2, '0').split('');
   }, [seconds]);
-  
+
+  const progressTime = useMemo(() => {
+    const timeByOneSecond = totalTime * 1000;
+    const timeByLessThanOneSecond = totalTime * 960;
+    const totalInMiliseconds = timeByOneSecond - (timeByOneSecond - timeByLessThanOneSecond);
+
+    return totalInMiliseconds / 1000;
+  }, [totalTime]);
+
   return (
     <div>
+      <Head>
+        <title>{minuteLeft}{minuteRight}:{secondLeft}{secondRight}</title>
+      </Head>
       <Container>
         <div>
           <span>{minuteLeft}</span>
@@ -52,7 +65,7 @@ export function Countdown() {
             <HiCheckCircle color="#4cd62b" />
           </Button>
           <ProgressBar active>
-            <Bar time={totalTime} />
+            <Bar time={progressTime} />
           </ProgressBar>
         </>
       ) : (
@@ -68,7 +81,7 @@ export function Countdown() {
                 <FiX />
               </Button>
               <ProgressBar active>
-                <Bar time={totalTime} />
+                <Bar time={progressTime} />
               </ProgressBar>
             </>
           ) : (

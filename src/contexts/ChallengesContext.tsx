@@ -1,9 +1,11 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
+import { createContext } from 'use-context-selector';
+
 import challanges from '../../challenges.json';
 import { LevelUpModal } from "../components/LevelUpModal";
 import { CompletedPomodoroModal } from "../components/CompletedPomodoroModal";
 import { api } from "../services/api";
-import { useChallengesCountdown } from "./ChallengesCoundownContext";
+import { useChallengesCountdown } from "../hooks/useChallengesCountdown";
 
 interface Challenge {
   type: 'body' | 'eye';
@@ -17,11 +19,13 @@ interface BodyData {
 
 interface ChallengesContextData {
   activeChallenge: Challenge;
+  loading: boolean;
   experienceToNextLevel: number;
   currentExperience: number;
   challengesCompleted: number;
   pomodorosCompleted: number;
   level: number;
+  collectData: (data: any) => void;
   levelUp: () => void;
   startNewChallenge: () => void;
   resetChallenge: () => void;
@@ -36,26 +40,33 @@ export const ChallengesContext = createContext({} as ChallengesContextData);
 
 interface ChallengesProviderProps {
   children: ReactNode;
-  email: string;
-  level: number;
-  currentExperience: number;
-  challengesCompleted: number;
-  total_experience: number;
-  pomodoros_completed: number;
 }
 
-export function ChallengesProvider({ children, ...rest }: ChallengesProviderProps) {
+export function ChallengesProvider({ children }: ChallengesProviderProps) {
   const { increaseCycle, cycle, resetCycle } = useChallengesCountdown();
-  
-  const [level, setLevel] = useState(rest.level);
-  const [pomodorosCompleted, setPomodorosCompleted] = useState(rest.pomodoros_completed);
-  const [currentExperience, setCurrentExperience] = useState(rest.currentExperience);
-  const [totalExperience, setTotalExprerience] = useState(rest.total_experience);
-  const [challengesCompleted, setChallengesCompleted] = useState(rest.challengesCompleted);
+
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState(null);
+  const [level, setLevel] = useState(null);
+  const [pomodorosCompleted, setPomodorosCompleted] = useState(null);
+  const [currentExperience, setCurrentExperience] = useState(null);
+  const [totalExperience, setTotalExprerience] = useState(null);
+  const [challengesCompleted, setChallengesCompleted] = useState(null);
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
   const [isCompletePomodoroOpen, setIsCompletePomodoroOpen] = useState(false);
   const [activeChallenge, setActiveChallenge] = useState<Challenge>(null);
   const experienceToNextLevel = Math.pow(((level + 1) * 4), 2);
+
+  const collectData = useCallback((data: any) => {
+    setLoading(true);
+    setEmail(data.email)
+    setLevel(data.level);
+    setPomodorosCompleted(data.pomodoros_completed);
+    setCurrentExperience(data.current_experience);
+    setTotalExprerience(data.total_experience);
+    setChallengesCompleted(data.challenges_completed);
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
     Notification.requestPermission();
@@ -109,8 +120,6 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
   const completePomodoro = useCallback(async () => {
     setIsCompletePomodoroOpen(true);
 
-    const { email } = rest;
-
     let finalExperience = currentExperience + 250;
 
     const updatedTotalExperience = totalExperience + 250;
@@ -141,7 +150,6 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
     setCurrentExperience(finalExperience);
     setTotalExprerience(updatedTotalExperience);
   }, [
-    rest, 
     currentExperience, 
     totalExperience, 
     experienceToNextLevel,
@@ -159,8 +167,6 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
 
   const completeChallenge = useCallback(async () => {
     if (!activeChallenge) return;
-
-    const { email } = rest;
 
     const { amount } = activeChallenge;
 
@@ -198,7 +204,6 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
     setActiveChallenge(null);
   }, 
   [
-    rest, 
     activeChallenge, 
     currentExperience, 
     challengesCompleted, 
@@ -208,11 +213,13 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
 
   return (
     <ChallengesContext.Provider value={{ 
+      loading,
       experienceToNextLevel,
       challengesCompleted,
       pomodorosCompleted,
       levelUp,
       level,
+      collectData,
       currentExperience,
       startNewChallenge,
       activeChallenge,
@@ -230,5 +237,3 @@ export function ChallengesProvider({ children, ...rest }: ChallengesProviderProp
     </ChallengesContext.Provider>
   )
 }
-
-export const useChallenge = (): ChallengesContextData => useContext(ChallengesContext);

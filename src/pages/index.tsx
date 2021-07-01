@@ -4,8 +4,6 @@ import { signIn } from 'next-auth/client';
 
 import { AiFillGithub } from 'react-icons/ai';
 
-import backgroundLogo from '../assets/back-logo.svg';
-import logoImg from '../assets/logo.png';
 import { SignInWithGithub } from '../components/SignInWithGithub';
 
 import { Container, Content, Wrapper } from '../styles/pages/Home';
@@ -27,10 +25,10 @@ export default function Home() {
         <title>Login | move.it</title>
       </Head>
 
-      <Image src={backgroundLogo} width={768} height={600} />
+      <Image src="/back-logo.svg" width={768} height={600} />
       <Content>
         <Wrapper>
-          <Image src={logoImg} width={360} height={72} />
+          <Image src="/logo.png" width={360} height={72} />
 
           <div>
             <h1>Bem-vindo</h1>

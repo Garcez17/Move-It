@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
+import { createContext } from 'use-context-selector';
 
 type ChallengesCountdownContextData = {
   cycle: number;
@@ -7,7 +8,7 @@ type ChallengesCountdownContextData = {
   resetCycle: () => void;
 }
 
-const ChallengesCountdownContext = createContext({} as ChallengesCountdownContextData);
+export const ChallengesCountdownContext = createContext({} as ChallengesCountdownContextData);
 
 type ChallengesCountdownProviderProps = {
   children: ReactNode;
@@ -39,5 +40,3 @@ export function ChallengesCountdownProvider({ children }: ChallengesCountdownPro
     </ChallengesCountdownContext.Provider>
   )
 }
-
-export const useChallengesCountdown = (): ChallengesCountdownContextData => useContext(ChallengesCountdownContext);

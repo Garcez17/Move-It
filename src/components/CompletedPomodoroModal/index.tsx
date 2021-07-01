@@ -1,5 +1,5 @@
 import Modal from 'react-modal';
-import { useChallenge } from '../../contexts/ChallengesContext';
+import { useChallenge } from '../../hooks/useChallenge';
 import { Container, Wrapper } from './styles';
 
 type CompletedPomodoroModalProps = {

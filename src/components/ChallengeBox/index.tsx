@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
-import { useChallenge } from '../../contexts/ChallengesContext';
-import { useChallengesCountdown } from '../../contexts/ChallengesCoundownContext';
-import { useCountdown } from '../../contexts/CountdownContext';
+import { memo, useMemo } from 'react';
+import { useChallenge } from '../../hooks/useChallenge';
+import { useChallengesCountdown } from '../../hooks/useChallengesCountdown';
+import { useCountdown } from '../../hooks/useCountdown';
 import {
   Container,
   ChallengeActive,
@@ -9,9 +9,13 @@ import {
   Button
 } from './styles';
 
-export function ChallengeBox() {
+type ChallengeBoxProps = {
+  resetCountdown: () => void;
+  hasFinished: boolean;
+}
+
+function ChallengeBoxComponent({ hasFinished, resetCountdown }: ChallengeBoxProps) {
   const { activeChallenge, resetChallenge, completeChallenge, continueCycle } = useChallenge();
-  const { resetCountdown, hasFinished } = useCountdown();
   const { hasBreak, cycle } = useChallengesCountdown();
 
   function handleChallengeSucceeded() {
@@ -127,3 +131,5 @@ export function ChallengeBox() {
     </Container>
   )
 }
+
+export const ChallengeBox = memo(ChallengeBoxComponent);

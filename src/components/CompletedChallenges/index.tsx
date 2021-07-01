@@ -1,13 +1,16 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { FiCheck } from 'react-icons/fi';
-import { useChallenge } from '../../contexts/ChallengesContext';
-import { useChallengesCountdown } from '../../contexts/ChallengesCoundownContext';
-import { useCountdown } from '../../contexts/CountdownContext';
+import { Pomodoro as PomodoroTypes } from '../../contexts/CountdownContext';
+import { useChallenge } from '../../hooks/useChallenge';
+import { useChallengesCountdown } from '../../hooks/useChallengesCountdown';
 import { Container, Info, Pomodoro, Workbar, Breakbar } from './styles';
 
-export function CompletedChallenges() {
+type CompletedChallengesProps = {
+  pomodoro: PomodoroTypes;
+}
+
+function CompletedChallengesComponent({ pomodoro }: CompletedChallengesProps) {
   const { challengesCompleted, pomodorosCompleted } = useChallenge();
-  const { pomodoro } = useCountdown();
   const { cycle } = useChallengesCountdown();
 
   const challangesComplete= useMemo(() => {
@@ -63,3 +66,5 @@ export function CompletedChallenges() {
     </Container>
   )
 }
+
+export const CompletedChallenges = memo(CompletedChallengesComponent);

@@ -1,8 +1,6 @@
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-
-import { ChallengesProvider } from '../contexts/ChallengesContext';
-import { CountdownProvider, useCountdown } from '../contexts/CountdownContext';
 
 import { ExperienceBar } from '../components/ExperienceBar';
 import { Profile } from '../components/Profile';
@@ -10,12 +8,20 @@ import { CompletedChallenges } from '../components/CompletedChallenges';
 import { Countdown } from '../components/Countdown';
 import { ChallengeBox } from '../components/ChallengeBox';
 import { Sidebar } from '../components/Sidebar';
-import { WelcomeModal } from '../components/WelcomeModal';
+import { WelcomeModalProps } from '../components/WelcomeModal';
 
 import { withSSRAuth } from '../utils/withSSRAuth';
 import { loadUser } from './api/users';
 
 import { Container, Content } from '../styles/pages/Dashboard';
+import { useCountdown } from '../hooks/useCountdown';
+import { useChallenge } from '../hooks/useChallenge';
+import { useEffect } from 'react';
+import { Loading } from '../components/Loading';
+
+const WelcomeModal = dynamic<WelcomeModalProps>(() => {
+  return import('../components/WelcomeModal').then(mod => mod.WelcomeModal);
+});
 
 type DashboardProps = {
   user: {
@@ -38,46 +44,67 @@ type DashboardProps = {
 }
 
 export default function Dashboard({ user, pomodoroData }: DashboardProps) {
-  const { pomodoro } = useCountdown();
+  const { 
+    pomodoro, 
+    handleAddPomodoro, 
+    collectData: countdownCollectData, 
+    loading: countdownLoading, 
+    hasFinished, 
+    resetCountdown 
+  } = useCountdown();
+
+  const { collectData, loading: challengeLoading } = useChallenge();
+
+  useEffect(() => {
+    collectData({
+      email: user.email,
+      level: user.level,
+      pomodoros_completed: user.pomodoros_completed,
+      current_experience: user.current_experience,
+      total_experience: user.total_experience,
+      challenges_completed: user.challenges_completed,
+    });
+
+    countdownCollectData({
+      pomodoro: pomodoroData,
+    })
+  }, []);
+
+  if (challengeLoading || countdownLoading) {
+    return (
+      <Container>
+        <Loading />
+      </Container>
+    );
+  };
 
   return (
-    <ChallengesProvider
-      email={user.email}
-      level={user.level}
-      pomodoros_completed={user.pomodoros_completed}
-      currentExperience={user.current_experience}
-      challengesCompleted={user.challenges_completed}
-      total_experience={user.total_experience}
-    >
-      <Container>
-        <Sidebar />
-        <Content>
-          <Head>
-            <title>{user.name} | move.it</title>
-          </Head>
-          <div>
-            <ExperienceBar />
+    <Container>
+      <Sidebar />
+      <Content>
+        <Head>
+          <title>{user.name} | move.it</title>
+        </Head>
+        <div>
+          <ExperienceBar />
 
-            <CountdownProvider pomodoroData={pomodoroData}>
-              {!pomodoro && <WelcomeModal userId={user.id} />}
-              <section>
-                <div>
-                  <Profile
-                    image_url={user.image}
-                    name={user.name}
-                  />
-                  <CompletedChallenges />
-                  <Countdown />
-                </div>
-                <div>
-                  <ChallengeBox />
-                </div>
-              </section>
-            </CountdownProvider>
-          </div>
-        </Content>
-      </Container>
-    </ChallengesProvider>
+            {!pomodoro && <WelcomeModal userId={user.id} pomodoro={pomodoro} handleAddPomodoro={handleAddPomodoro} />}
+            <section>
+              <div>
+                <Profile
+                  image_url={user.image}
+                  name={user.name}
+                />
+                <CompletedChallenges pomodoro={pomodoro} />
+                <Countdown />
+              </div>
+              <div>
+                <ChallengeBox hasFinished={hasFinished} resetCountdown={resetCountdown} />
+              </div>
+            </section>
+        </div>
+      </Content>
+    </Container>
   )
 }
 
